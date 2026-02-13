@@ -258,7 +258,7 @@ await handler.submit({ email: 'user@example.com' });
 | `target` | `string \| HTMLElement` | - | Target element or selector |
 | `slug` | `string` | - | Form slug |
 | `submitText` | `string` | `'Submit'` | Submit button text |
-| `showBranding` | `boolean` | `true` | Show "Powered by Mira" branding |
+| `showBranding` | `boolean` | `true` | Show "Powered by forms.expert" branding |
 | `resetOnSuccess` | `boolean` | `false` | Reset form after successful submission |
 | `lang` | `string` | - | Language code (e.g. `'en'`, `'uk'`) passed as `?lang=CODE` to the backend |
 | `redirectUrl` | `string` | - | Redirect URL after success |
@@ -278,6 +278,96 @@ await handler.submit({ email: 'user@example.com' });
 | `data-branding` | No | Set to `'false'` to hide branding |
 | `data-lang` | No | Language code (e.g. `en`, `uk`) |
 | `data-reset` | No | Set to `'true'` to reset after submission |
+
+## Styling
+
+The SDK automatically reads styling from the form configuration set in the builder. Styling is merged from two sources: `schema.styling` (basic) and the top-level `styling` object (full hosted config). Top-level values take precedence.
+
+### Styling Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `theme` | `'light' \| 'dark' \| 'system'` | `'light'` | Color theme |
+| `primaryColor` | `string` | `'#3b82f6'` | Primary accent color (button background) |
+| `buttonColor` | `string` | `'#ffffff'` | Button text color |
+| `backgroundColor` | `string` | `'#ffffff'` | Form background color |
+| `textColor` | `string` | `'#1f2937'` | Text color |
+| `errorColor` | `string` | `'#EF4444'` | Validation error color |
+| `successColor` | `string` | `'#22c55e'` | Success state color (badge, messages) |
+| `fontFamily` | `string` | `'Inter, system-ui, sans-serif'` | Font family |
+| `fontSize` | `'sm' \| 'md' \| 'lg'` | `'md'` | Base font size |
+| `buttonText` | `string` | `'Submit'` | Submit button label |
+| `buttonStyle` | `'filled' \| 'outline'` | `'filled'` | Button fill style |
+| `labelPosition` | `'top' \| 'left' \| 'floating'` | `'top'` | Label placement |
+| `hideRequiredAsterisk` | `boolean` | `false` | Hide `*` on required fields |
+| `transparentBackground` | `boolean` | `false` | Transparent form background |
+
+### Border Radius
+
+**Field border radius** (`borderRadius`) — applied to inputs, selects, textareas:
+
+| Value | Pixels | Description |
+|-------|--------|-------------|
+| `'none'` | `0` | No rounding |
+| `'sm'` | `2px` | Subtle rounding |
+| `'md'` | `6px` | Medium rounding (default) |
+| `'lg'` | `8px` | Large rounding |
+
+**Button border radius** (`buttonRadius`) — applied to the submit button independently:
+
+| Value | Pixels | Description |
+|-------|--------|-------------|
+| `'none'` | `0` | Square corners |
+| `'small'` | `4px` | Subtle rounding |
+| `'medium'` | `8px` | Medium rounding (default) |
+| `'large'` | `12px` | Large rounding |
+| `'full'` | `9999px` | Fully rounded / pill shape |
+
+### Layout & Spacing
+
+| Property | Values | Default | Description |
+|----------|--------|---------|-------------|
+| `formWidth` | `'narrow' \| 'medium' \| 'wide' \| 'full'` | `'full'` | Form container width |
+| `formPadding` | `'compact' \| 'normal' \| 'relaxed' \| 'spacious'` | `'normal'` | Inner form padding |
+| `fieldLayout` | `'stacked' \| 'inline'` | `'stacked'` | Field arrangement |
+| `fieldSpacing` | `'compact' \| 'normal' \| 'relaxed' \| 'spacious'` | `'normal'` | Vertical gap between fields |
+| `labelSpacing` | `'compact' \| 'normal' \| 'relaxed'` | `'normal'` | Gap between label and input |
+| `buttonAlign` | `'left' \| 'center' \| 'right'` | `'left'` | Submit button alignment |
+
+### Layout Fields (Heading & Paragraph)
+
+**Heading size** (`headingSize`) — controls `<h2>` heading fields:
+
+| Value | Font Size | Description |
+|-------|-----------|-------------|
+| `'small'` | `18px` | Small heading |
+| `'medium'` | `22px` | Medium heading (default) |
+| `'large'` | `28px` | Large heading |
+| `'extra-large'` | `34px` | Extra-large heading |
+
+**Paragraph size** (`paragraphSize`) — controls paragraph layout fields:
+
+| Value | Font Size | Description |
+|-------|-----------|-------------|
+| `'small'` | `12px` | Small text |
+| `'medium'` | `14px` | Medium text (default) |
+| `'large'` | `16px` | Large text |
+
+Individual paragraph fields can override the global size via the `paragraphFontSize` field property (in pixels).
+
+### Form Name Display
+
+The form name is rendered as an `<h1>` above the form fields. Visibility is controlled by `hostedConfig.showFormName` (defaults to `true`). This can be toggled in the form builder under Page Settings → "Show form name as title".
+
+### Logo & Background
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `logoUrl` | `string` | URL for a logo image above the form |
+| `logoPosition` | `'top-left' \| 'top-center' \| 'top-right'` | Logo alignment |
+| `coverImageUrl` | `string` | Cover image URL |
+| `backgroundImageUrl` | `string` | Background image URL |
+| `backgroundOverlay` | `number` | Background overlay opacity (0–100) |
 
 ## Error Handling
 

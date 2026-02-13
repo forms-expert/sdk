@@ -72,7 +72,7 @@ interface FormStyling {
     buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     buttonAlign?: 'left' | 'center' | 'right';
     fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
-    formPadding?: 'compact' | 'normal' | 'relaxed' | 'spacious';
+    formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
     labelSpacing?: 'compact' | 'normal' | 'relaxed';
     placeholderFontSize?: 'small' | 'medium' | 'large';
     headingSize?: 'small' | 'medium' | 'large' | 'extra-large';
@@ -148,6 +148,7 @@ interface FormStatusResponse {
         maxAttachmentSize?: number;
         successMessage?: string;
         redirectUrl?: string;
+        showFormName?: boolean;
     };
     /** Access control configuration */
     accessControl?: {
@@ -159,7 +160,6 @@ interface FormStatusResponse {
     /** Hosted config (page settings, success page, etc.) */
     hostedConfig?: {
         pageTitle?: string;
-        showFormName?: boolean;
         successMessage?: string;
         successPageType?: 'message' | 'redirect' | 'custom';
         redirectUrl?: string;

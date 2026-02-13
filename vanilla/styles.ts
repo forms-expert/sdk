@@ -60,6 +60,7 @@ function getFieldSpacing(spacing?: FormStyling['fieldSpacing']): string {
 
 function getFormPadding(padding?: FormStyling['formPadding']): string {
   switch (padding) {
+    case 'none': return '0';
     case 'compact': return '1rem';
     case 'relaxed': return '2.5rem';
     case 'spacious': return '3.5rem';

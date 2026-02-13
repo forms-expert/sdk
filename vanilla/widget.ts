@@ -126,7 +126,7 @@ export class FormWidget {
       isLoading: this.isLoading,
       hideRequiredAsterisk: mergedStyling.hideRequiredAsterisk,
       formName: this.config.hostedConfig?.pageTitle as string || this.config.name,
-      showFormName: this.config.hostedConfig?.showFormName as boolean | undefined,
+      showFormName: this.config.settings?.showFormName as boolean | undefined,
     });
 
     // Handle input changes

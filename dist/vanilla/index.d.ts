@@ -70,7 +70,7 @@ interface FormStyling {
     buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     buttonAlign?: 'left' | 'center' | 'right';
     fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
-    formPadding?: 'compact' | 'normal' | 'relaxed' | 'spacious';
+    formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
     labelSpacing?: 'compact' | 'normal' | 'relaxed';
     placeholderFontSize?: 'small' | 'medium' | 'large';
     headingSize?: 'small' | 'medium' | 'large' | 'extra-large';

@@ -628,6 +628,8 @@ function getFieldSpacing(spacing) {
 }
 function getFormPadding(padding) {
   switch (padding) {
+    case "none":
+      return "0";
     case "compact":
       return "1rem";
     case "relaxed":
@@ -718,6 +720,7 @@ function FormsExpertForm({
   const captchaContainerRef = (0, import_react2.useRef)(null);
   const captchaWidgetId = (0, import_react2.useRef)(null);
   const captchaScriptLoaded = (0, import_react2.useRef)(false);
+  const formScopeId = (0, import_react2.useMemo)(() => "fe-" + Math.random().toString(36).slice(2, 8), []);
   (0, import_react2.useEffect)(() => {
     if (!form.requiresCaptcha || !form.captchaSiteKey || !form.captchaProvider) return;
     if (captchaScriptLoaded.current) return;
@@ -939,6 +942,7 @@ function FormsExpertForm({
     {
       onSubmit: handleSubmit,
       className,
+      "data-fe-scope": formScopeId,
       style: {
         fontFamily,
         fontSize,
@@ -953,6 +957,7 @@ function FormsExpertForm({
         ...style
       },
       children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { dangerouslySetInnerHTML: { __html: `form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }` } }),
         styling.logoUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
           textAlign: styling.logoPosition === "top-left" ? "left" : styling.logoPosition === "top-right" ? "right" : "center",
           marginBottom: "1rem"
@@ -971,7 +976,7 @@ function FormsExpertForm({
             }
           }
         ),
-        form.config.hostedConfig?.showFormName !== false && form.config.name && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { style: {
+        form.config.settings?.showFormName !== false && form.config.name && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { style: {
           fontSize: "1.5rem",
           fontWeight: 700,
           marginBottom: "0.5rem",

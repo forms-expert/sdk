@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FormEvent, ChangeEvent, CSSProperties } from 'react';
+import { useState, useEffect, useRef, useMemo, FormEvent, ChangeEvent, CSSProperties } from 'react';
 import {
   FormsSDKConfig,
   FormField,
@@ -68,6 +68,7 @@ function getFieldSpacing(spacing?: FormStyling['fieldSpacing']): string {
 
 function getFormPadding(padding?: FormStyling['formPadding']): string {
   switch (padding) {
+    case 'none': return '0';
     case 'compact': return '1rem';
     case 'relaxed': return '2.5rem';
     case 'spacious': return '3.5rem';
@@ -170,6 +171,7 @@ export function FormsExpertForm({
   const captchaContainerRef = useRef<HTMLDivElement>(null);
   const captchaWidgetId = useRef<string | null>(null);
   const captchaScriptLoaded = useRef(false);
+  const formScopeId = useMemo(() => 'fe-' + Math.random().toString(36).slice(2, 8), []);
 
   // Load captcha script and render widget
   useEffect(() => {
@@ -415,6 +417,7 @@ export function FormsExpertForm({
     <form
       onSubmit={handleSubmit}
       className={className}
+      data-fe-scope={formScopeId}
       style={{
         fontFamily,
         fontSize,
@@ -429,6 +432,8 @@ export function FormsExpertForm({
         ...style,
       }}
     >
+      {/* Scoped placeholder styles */}
+      <style dangerouslySetInnerHTML={{ __html: `form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }` }} />
       {/* Logo */}
       {styling.logoUrl && (
         <div style={{
@@ -455,7 +460,7 @@ export function FormsExpertForm({
       )}
 
       {/* Form name */}
-      {(form.config.hostedConfig?.showFormName !== false) && form.config.name && (
+      {(form.config.settings?.showFormName !== false) && form.config.name && (
         <h1 style={{
           fontSize: '1.5rem',
           fontWeight: 700,

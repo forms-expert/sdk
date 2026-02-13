@@ -528,7 +528,7 @@ function useForm(options) {
 }
 
 // react/forms-expert-form.tsx
-import { useState as useState2, useEffect as useEffect2, useRef } from "react";
+import { useState as useState2, useEffect as useEffect2, useRef, useMemo as useMemo2 } from "react";
 import { jsx as jsx2, jsxs } from "react/jsx-runtime";
 var defaultStyling = {
   theme: "light",
@@ -606,6 +606,8 @@ function getFieldSpacing(spacing) {
 }
 function getFormPadding(padding) {
   switch (padding) {
+    case "none":
+      return "0";
     case "compact":
       return "1rem";
     case "relaxed":
@@ -696,6 +698,7 @@ function FormsExpertForm({
   const captchaContainerRef = useRef(null);
   const captchaWidgetId = useRef(null);
   const captchaScriptLoaded = useRef(false);
+  const formScopeId = useMemo2(() => "fe-" + Math.random().toString(36).slice(2, 8), []);
   useEffect2(() => {
     if (!form.requiresCaptcha || !form.captchaSiteKey || !form.captchaProvider) return;
     if (captchaScriptLoaded.current) return;
@@ -917,6 +920,7 @@ function FormsExpertForm({
     {
       onSubmit: handleSubmit,
       className,
+      "data-fe-scope": formScopeId,
       style: {
         fontFamily,
         fontSize,
@@ -931,6 +935,7 @@ function FormsExpertForm({
         ...style
       },
       children: [
+        /* @__PURE__ */ jsx2("style", { dangerouslySetInnerHTML: { __html: `form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }` } }),
         styling.logoUrl && /* @__PURE__ */ jsx2("div", { style: {
           textAlign: styling.logoPosition === "top-left" ? "left" : styling.logoPosition === "top-right" ? "right" : "center",
           marginBottom: "1rem"
@@ -949,7 +954,7 @@ function FormsExpertForm({
             }
           }
         ),
-        form.config.hostedConfig?.showFormName !== false && form.config.name && /* @__PURE__ */ jsx2("h1", { style: {
+        form.config.settings?.showFormName !== false && form.config.name && /* @__PURE__ */ jsx2("h1", { style: {
           fontSize: "1.5rem",
           fontWeight: 700,
           marginBottom: "0.5rem",
