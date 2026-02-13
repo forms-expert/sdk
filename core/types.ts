@@ -131,11 +131,29 @@ export interface FormStatusResponse {
   active: boolean;
   formId?: string;
   name?: string;
+  description?: string | null;
   mode?: 'free' | 'schema';
+  type?: 'hosted' | 'embed' | 'both';
+  layout?: 'single' | 'multi-step';
   schema?: FormSchema;
+  steps?: Array<{ title: string; description?: string; fields: string[] }>;
+  /** Top-level styling (full hosted styling config) */
+  styling?: FormStyling;
+  embedConfig?: {
+    width?: string;
+    height?: string;
+    maxHeight?: string;
+    minHeight?: string;
+    autoResize?: boolean;
+    transparentBackground?: boolean;
+    [key: string]: unknown;
+  };
   error?: string;
+  /** Captcha settings (top-level) */
+  captcha?: CaptchaSettings;
   settings?: {
-    captcha: CaptchaSettings;
+    /** @deprecated Use top-level captcha instead */
+    captcha?: CaptchaSettings;
     honeypot: boolean;
     allowAttachments: boolean;
     maxAttachments?: number;
@@ -143,12 +161,21 @@ export interface FormStatusResponse {
     successMessage?: string;
     redirectUrl?: string;
   };
+  /** Access control configuration */
+  accessControl?: {
+    mode: string;
+    passwordProtected: boolean;
+  };
   /** Branding configuration */
   branding?: FormBranding;
+  closesAt?: string | null;
+  resourceId?: string;
   /** Available published translation language codes */
   availableLanguages?: string[];
   /** Current language applied to this response (null if base language) */
   currentLanguage?: string | null;
+  /** Whether to show language switch UI */
+  showLanguageSwitch?: boolean;
 }
 
 /**

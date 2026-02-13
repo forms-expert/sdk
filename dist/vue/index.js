@@ -436,7 +436,7 @@ function useForm(options) {
 }
 
 // vue/plugin.ts
-var FORMS_SDK_KEY = /* @__PURE__ */ Symbol("forms-sdk");
+var FORMS_SDK_KEY = Symbol("forms-sdk");
 function createFormsPlugin(config) {
   const sdk = new FormsSDK(config);
   return {

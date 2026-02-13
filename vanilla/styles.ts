@@ -247,7 +247,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 }
 
 .forms-expert-error-message {
-  color: #ef4444;
+  color: ${s.errorColor || '#ef4444'};
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
@@ -323,7 +323,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   width: 3rem;
   height: 3rem;
   margin: 0 auto 1rem;
-  color: #22c55e;
+  color: ${s.successColor || '#22c55e'};
 }
 
 .forms-expert-success-message {

@@ -517,9 +517,9 @@ function useForm(options) {
     submit,
     reset,
     clearErrors,
-    requiresCaptcha: config?.settings?.captcha?.enabled ?? false,
-    captchaProvider: config?.settings?.captcha?.provider,
-    captchaSiteKey: config?.settings?.captcha?.siteKey,
+    requiresCaptcha: config?.captcha?.enabled ?? config?.settings?.captcha?.enabled ?? false,
+    captchaProvider: config?.captcha?.provider ?? config?.settings?.captcha?.provider,
+    captchaSiteKey: config?.captcha?.siteKey ?? config?.settings?.captcha?.siteKey,
     honeypotEnabled: config?.settings?.honeypot ?? false,
     allowsAttachments,
     maxAttachments,
@@ -773,7 +773,7 @@ function FormsExpertForm({
       }
     }
   };
-  const styling = form.config?.schema?.styling || defaultStyling;
+  const styling = { ...defaultStyling, ...form.config?.schema?.styling, ...form.config?.styling };
   const radius = getBorderRadius(styling.borderRadius);
   const btnRadius = getButtonRadius(styling.buttonRadius);
   const fontSize = getFontSize(styling.fontSize);
@@ -1056,14 +1056,26 @@ function FormFieldInput({
     return field.options.map((o) => typeof o === "string" ? { value: o, label: o } : o);
   };
   if (field.type === "heading") {
-    return /* @__PURE__ */ jsx2("h2", { style: { marginBottom: fieldSpacing, fontSize: getHeadingSize(styling.headingSize), fontWeight: 600 }, children: field.content || field.label });
+    return /* @__PURE__ */ jsxs("div", { style: { marginBottom: fieldSpacing }, children: [
+      /* @__PURE__ */ jsx2("h2", { style: { fontSize: getHeadingSize(styling.headingSize), fontWeight: 600 }, children: field.label }),
+      field.content && /* @__PURE__ */ jsx2("p", { style: { fontSize: "0.875rem", color: styling.theme === "dark" ? "#9ca3af" : "#6b7280", marginTop: "0.25rem" }, children: field.content })
+    ] });
   }
   if (field.type === "divider") {
     return /* @__PURE__ */ jsx2("hr", { style: { marginBottom: fieldSpacing, border: "none", borderTop: `1px solid ${styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } });
   }
   if (field.type === "paragraph") {
     const pSize = field.paragraphFontSize ? `${field.paragraphFontSize}px` : getParagraphSize(styling.paragraphSize);
-    return /* @__PURE__ */ jsx2("p", { style: { marginBottom: fieldSpacing, fontSize: pSize, color: styling.theme === "dark" ? "#9ca3af" : "#6b7280" }, children: field.content || field.label });
+    return /* @__PURE__ */ jsxs("div", { style: { marginBottom: fieldSpacing }, children: [
+      field.label && /* @__PURE__ */ jsx2("p", { style: { fontWeight: 500, fontSize: pSize, marginBottom: "0.25rem" }, children: field.label }),
+      field.content && /* @__PURE__ */ jsx2(
+        "div",
+        {
+          style: { fontSize: pSize, color: styling.theme === "dark" ? "#9ca3af" : "#6b7280" },
+          dangerouslySetInnerHTML: { __html: field.content }
+        }
+      )
+    ] });
   }
   if (field.type === "hidden") {
     return /* @__PURE__ */ jsx2("input", { type: "hidden", name: field.name, value: String(value || field.defaultValue || "") });

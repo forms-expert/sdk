@@ -1,4 +1,4 @@
-import { FormField, FormSchema, ValidationError } from '../core/types';
+import { FormField, FormSchema, FormStyling, ValidationError } from '../core/types';
 
 /**
  * Escape HTML special characters
@@ -15,12 +15,36 @@ function escapeHtml(text: string): string {
 const LAYOUT_TYPES = new Set(['heading', 'divider', 'paragraph']);
 
 /**
+ * Heading size map
+ */
+function getHeadingSizePx(size?: string): string {
+  switch (size) {
+    case 'small': return '18px';
+    case 'large': return '30px';
+    case 'extra-large': return '36px';
+    default: return '24px';
+  }
+}
+
+/**
+ * Paragraph size map
+ */
+function getParagraphSizePx(size?: string): string {
+  switch (size) {
+    case 'small': return '14px';
+    case 'large': return '18px';
+    default: return '16px';
+  }
+}
+
+/**
  * Create a form field element
  */
 export function renderField(
   field: FormField,
   value: unknown,
-  error?: string
+  error?: string,
+  styling?: Partial<FormStyling>
 ): HTMLElement {
   const group = document.createElement('div');
 
@@ -29,6 +53,7 @@ export function renderField(
     group.className = 'forms-expert-group';
     const h = document.createElement('h3');
     h.className = 'forms-expert-heading';
+    h.style.fontSize = getHeadingSizePx(styling?.headingSize);
     h.textContent = field.label || '';
     group.appendChild(h);
     if (field.content) {
@@ -48,20 +73,22 @@ export function renderField(
 
   if (field.type === 'paragraph') {
     group.className = 'forms-expert-group';
+    const pFontSize = field.paragraphFontSize
+      ? `${field.paragraphFontSize}px`
+      : getParagraphSizePx(styling?.paragraphSize);
     if (field.label) {
       const p = document.createElement('p');
       p.className = 'forms-expert-paragraph-label';
+      p.style.fontSize = pFontSize;
       p.textContent = field.label;
       group.appendChild(p);
     }
     if (field.content) {
-      const p = document.createElement('p');
-      p.className = 'forms-expert-paragraph';
-      p.textContent = field.content;
-      if (field.paragraphFontSize) {
-        p.style.fontSize = `${field.paragraphFontSize}px`;
-      }
-      group.appendChild(p);
+      const div = document.createElement('div');
+      div.className = 'forms-expert-paragraph';
+      div.style.fontSize = pFontSize;
+      div.innerHTML = field.content;
+      group.appendChild(div);
     }
     return group;
   }
@@ -593,8 +620,9 @@ export function renderForm(
   }
   
   // Render fields
+  const styling = schema.styling;
   schema.fields.forEach((field) => {
-    const fieldEl = renderField(field, values[field.name], errors[field.name]);
+    const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
     form.appendChild(fieldEl);
   });
   

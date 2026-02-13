@@ -266,7 +266,7 @@ export function FormsExpertForm({
     }
   };
 
-  const styling = form.config?.schema?.styling || defaultStyling;
+  const styling = { ...defaultStyling, ...form.config?.schema?.styling, ...form.config?.styling };
   const radius = getBorderRadius(styling.borderRadius);
   const btnRadius = getButtonRadius(styling.buttonRadius);
   const fontSize = getFontSize(styling.fontSize);
@@ -597,14 +597,33 @@ function FormFieldInput({
 
   // Layout fields (no data)
   if (field.type === 'heading') {
-    return <h2 style={{ marginBottom: fieldSpacing, fontSize: getHeadingSize(styling.headingSize), fontWeight: 600 }}>{field.content || field.label}</h2>;
+    return (
+      <div style={{ marginBottom: fieldSpacing }}>
+        <h2 style={{ fontSize: getHeadingSize(styling.headingSize), fontWeight: 600 }}>{field.label}</h2>
+        {field.content && (
+          <p style={{ fontSize: '0.875rem', color: styling.theme === 'dark' ? '#9ca3af' : '#6b7280', marginTop: '0.25rem' }}>{field.content}</p>
+        )}
+      </div>
+    );
   }
   if (field.type === 'divider') {
     return <hr style={{ marginBottom: fieldSpacing, border: 'none', borderTop: `1px solid ${styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}` }} />;
   }
   if (field.type === 'paragraph') {
     const pSize = field.paragraphFontSize ? `${field.paragraphFontSize}px` : getParagraphSize(styling.paragraphSize);
-    return <p style={{ marginBottom: fieldSpacing, fontSize: pSize, color: styling.theme === 'dark' ? '#9ca3af' : '#6b7280' }}>{field.content || field.label}</p>;
+    return (
+      <div style={{ marginBottom: fieldSpacing }}>
+        {field.label && (
+          <p style={{ fontWeight: 500, fontSize: pSize, marginBottom: '0.25rem' }}>{field.label}</p>
+        )}
+        {field.content && (
+          <div
+            style={{ fontSize: pSize, color: styling.theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+            dangerouslySetInnerHTML={{ __html: field.content }}
+          />
+        )}
+      </div>
+    );
   }
   if (field.type === 'hidden') {
     return <input type="hidden" name={field.name} value={String(value || field.defaultValue || '')} />;

@@ -2,6 +2,7 @@ import {
   FormsSDK,
   FormsSDKConfig,
   FormStatusResponse,
+  FormStyling,
   SubmissionResponse,
   ValidationError,
   FormValidationError,
@@ -94,7 +95,8 @@ export class FormWidget {
 
     this.styleEl = document.createElement('style');
     this.styleEl.id = `forms-expert-styles-${this.options.slug}`;
-    this.styleEl.textContent = generateFormStyles(this.config?.schema?.styling);
+    const mergedStyling = { ...this.config?.schema?.styling, ...this.config?.styling } as FormStyling | undefined;
+    this.styleEl.textContent = generateFormStyles(mergedStyling);
     document.head.appendChild(this.styleEl);
   }
 
@@ -112,13 +114,17 @@ export class FormWidget {
       return;
     }
 
-    const form = renderForm(this.config.schema, this.values, this.errors, {
+    const mergedStyling = { ...this.config.schema.styling, ...this.config.styling } as FormStyling;
+    const schemaWithStyling = { ...this.config.schema, styling: mergedStyling };
+
+    const form = renderForm(schemaWithStyling, this.values, this.errors, {
       honeypot: this.config.settings?.honeypot,
       showBranding: this.config.branding?.enabled !== false,
       brandingText: this.config.branding?.text,
       brandingUrl: this.config.branding?.url,
-      submitText: this.options.submitText,
+      submitText: mergedStyling.buttonText || this.options.submitText,
       isLoading: this.isLoading,
+      hideRequiredAsterisk: mergedStyling.hideRequiredAsterisk,
     });
 
     // Handle input changes

@@ -119,7 +119,7 @@ declare function generateFormStyles(styling?: FormStyling): string;
 /**
  * Create a form field element
  */
-declare function renderField(field: FormField, value: unknown, error?: string): HTMLElement;
+declare function renderField(field: FormField, value: unknown, error?: string, styling?: Partial<FormStyling>): HTMLElement;
 /**
  * Render the entire form
  */

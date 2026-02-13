@@ -1,6 +1,6 @@
 {
   "name": "@forms.expert/sdk",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "Forms SDK for submitting and rendering forms",
   "type": "module",
   "publishConfig": {
@@ -31,9 +31,6 @@
       "require": "./dist/vue/index.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -60,6 +57,18 @@
     "typescript": "^5.0.0",
     "vue": "^3.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forms-expert/sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/forms-expert/sdk/issues"
+  },
+  "homepage": "https://github.com/forms-expert/sdk/blob/main/README.md",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [
     "forms",
     "form-submission",
