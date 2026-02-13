@@ -125,6 +125,8 @@ export class FormWidget {
       submitText: mergedStyling.buttonText || this.options.submitText,
       isLoading: this.isLoading,
       hideRequiredAsterisk: mergedStyling.hideRequiredAsterisk,
+      formName: this.config.hostedConfig?.pageTitle as string || this.config.name,
+      showFormName: this.config.hostedConfig?.showFormName as boolean | undefined,
     });
 
     // Handle input changes

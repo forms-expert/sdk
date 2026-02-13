@@ -168,6 +168,16 @@ export interface FormStatusResponse {
   };
   /** Branding configuration */
   branding?: FormBranding;
+  /** Hosted config (page settings, success page, etc.) */
+  hostedConfig?: {
+    pageTitle?: string;
+    showFormName?: boolean;
+    successMessage?: string;
+    successPageType?: 'message' | 'redirect' | 'custom';
+    redirectUrl?: string;
+    customSuccessHtml?: string;
+    [key: string]: unknown;
+  };
   closesAt?: string | null;
   resourceId?: string;
   /** Available published translation language codes */

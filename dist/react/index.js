@@ -782,7 +782,8 @@ function FormsExpertForm({
   const formPadding = getFormPadding(styling.formPadding);
   const labelSpacing = getLabelSpacing(styling.labelSpacing);
   const formMaxWidth = getFormMaxWidth(styling.formWidth);
-  const btnColor = styling.buttonColor || styling.primaryColor;
+  const btnBgColor = styling.primaryColor;
+  const btnTextColor = styling.buttonColor;
   const fontFamily = styling.fontFamily || "system-ui, -apple-system, sans-serif";
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
@@ -948,6 +949,12 @@ function FormsExpertForm({
             }
           }
         ),
+        form.config.hostedConfig?.showFormName !== false && form.config.name && /* @__PURE__ */ jsx2("h1", { style: {
+          fontSize: "1.5rem",
+          fontWeight: 700,
+          marginBottom: "0.5rem",
+          color: styling.textColor
+        }, children: form.config.hostedConfig?.pageTitle || form.config.name }),
         fields.map((field) => /* @__PURE__ */ jsx2(
           FormFieldInput,
           {
@@ -979,9 +986,9 @@ function FormsExpertForm({
               borderRadius: btnRadius,
               cursor: form.isLoading ? "not-allowed" : "pointer",
               opacity: form.isLoading ? 0.5 : 1,
-              backgroundColor: styling.buttonStyle === "filled" ? btnColor : "transparent",
-              color: styling.buttonStyle === "filled" ? "white" : btnColor,
-              border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnColor}`
+              backgroundColor: styling.buttonStyle === "filled" ? btnBgColor : "transparent",
+              color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
+              border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`
             },
             children: form.isLoading ? "Submitting..." : resolvedButtonText
           }

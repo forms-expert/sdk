@@ -275,7 +275,8 @@ export function FormsExpertForm({
   const formPadding = getFormPadding(styling.formPadding);
   const labelSpacing = getLabelSpacing(styling.labelSpacing);
   const formMaxWidth = getFormMaxWidth(styling.formWidth);
-  const btnColor = styling.buttonColor || styling.primaryColor;
+  const btnBgColor = styling.primaryColor;
+  const btnTextColor = styling.buttonColor;
   const fontFamily = styling.fontFamily || 'system-ui, -apple-system, sans-serif';
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
@@ -453,6 +454,18 @@ export function FormsExpertForm({
         />
       )}
 
+      {/* Form name */}
+      {(form.config.hostedConfig?.showFormName !== false) && form.config.name && (
+        <h1 style={{
+          fontSize: '1.5rem',
+          fontWeight: 700,
+          marginBottom: '0.5rem',
+          color: styling.textColor,
+        }}>
+          {form.config.hostedConfig?.pageTitle || form.config.name}
+        </h1>
+      )}
+
       {fields.map((field) => (
         <FormFieldInput
           key={field.name}
@@ -494,13 +507,15 @@ export function FormsExpertForm({
             cursor: form.isLoading ? 'not-allowed' : 'pointer',
             opacity: form.isLoading ? 0.5 : 1,
             backgroundColor:
-              styling.buttonStyle === 'filled' ? btnColor : 'transparent',
+              styling.buttonStyle === 'filled' ? btnBgColor : 'transparent',
             color:
-              styling.buttonStyle === 'filled' ? 'white' : btnColor,
+              styling.buttonStyle === 'filled'
+                ? (btnTextColor || 'white')
+                : btnBgColor,
             border:
               styling.buttonStyle === 'filled'
                 ? 'none'
-                : `2px solid ${btnColor}`,
+                : `2px solid ${btnBgColor}`,
           }}
         >
           {form.isLoading ? 'Submitting...' : resolvedButtonText}

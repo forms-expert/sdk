@@ -131,6 +131,8 @@ declare function renderForm(schema: FormSchema, values?: Record<string, unknown>
     submitText?: string;
     isLoading?: boolean;
     hideRequiredAsterisk?: boolean;
+    formName?: string;
+    showFormName?: boolean;
 }): HTMLFormElement;
 /**
  * Render success message

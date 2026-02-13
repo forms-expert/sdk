@@ -607,6 +607,8 @@ export function renderForm(
     submitText?: string;
     isLoading?: boolean;
     hideRequiredAsterisk?: boolean;
+    formName?: string;
+    showFormName?: boolean;
   } = {}
 ): HTMLFormElement {
   const form = document.createElement('form');
@@ -617,6 +619,17 @@ export function renderForm(
     const style = document.createElement('style');
     style.textContent = '.forms-expert .forms-expert-required { display: none; }';
     form.appendChild(style);
+  }
+
+  // Form name
+  if (options.showFormName !== false && options.formName) {
+    const title = document.createElement('h1');
+    title.className = 'forms-expert-title';
+    title.textContent = options.formName;
+    title.style.fontSize = '1.5rem';
+    title.style.fontWeight = '700';
+    title.style.marginBottom = '0.5rem';
+    form.appendChild(title);
   }
   
   // Render fields

@@ -102,7 +102,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   const formPadding = getFormPadding(s.formPadding);
   const labelSpacing = getLabelSpacing(s.labelSpacing);
   const formWidth = getFormWidth(s.formWidth);
-  const btnColor = s.buttonColor || s.primaryColor;
+  const btnBgColor = s.primaryColor;
+  const btnTextColor = s.buttonColor;
   const fontFamily = s.fontFamily || 'system-ui, -apple-system, sans-serif';
   const btnAlign = getButtonAlign(s.buttonAlign);
 
@@ -268,8 +269,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
   ${s.buttonStyle === 'filled' 
-    ? `background-color: ${btnColor}; color: white; border: none;`
-    : `background-color: transparent; color: ${btnColor}; border: 2px solid ${btnColor};`
+    ? `background-color: ${btnBgColor}; color: ${btnTextColor || 'white'}; border: none;`
+    : `background-color: transparent; color: ${btnBgColor}; border: 2px solid ${btnBgColor};`
   }
 }
 
