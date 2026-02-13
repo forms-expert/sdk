@@ -200,6 +200,10 @@ declare class FormWidget {
      */
     reset(): void;
     /**
+     * Render loading spinner
+     */
+    private renderLoading;
+    /**
      * Render error message
      */
     private renderError;

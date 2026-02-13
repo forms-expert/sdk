@@ -68,6 +68,7 @@ export class FormWidget {
    */
   async init(): Promise<void> {
     try {
+      this.renderLoading();
       this.config = await this.sdk.isActive(this.options.slug, this.options.lang);
 
       if (!this.config.active) {
@@ -216,6 +217,20 @@ export class FormWidget {
     this.isLoading = false;
     this.isSubmitted = false;
     this.render();
+  }
+
+  /**
+   * Render loading spinner
+   */
+  private renderLoading(): void {
+    this.container.innerHTML = `
+      <div class="forms-expert" style="display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="animation: fe-spin 1s linear infinite; color: #9ca3af;">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <style>@keyframes fe-spin { to { transform: rotate(360deg); } }</style>
+    `;
   }
 
   /**

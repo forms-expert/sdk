@@ -808,17 +808,21 @@ function FormsExpertForm({
     }
   };
   if (form.isInitializing) {
-    return /* @__PURE__ */ jsx2(
+    return /* @__PURE__ */ jsxs(
       "div",
       {
         className,
         style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           padding: "2rem",
-          textAlign: "center",
-          color: styling.textColor,
           ...style
         },
-        children: "Loading form..."
+        children: [
+          /* @__PURE__ */ jsx2("svg", { width: "24", height: "24", viewBox: "0 0 24 24", style: { animation: "spin 1s linear infinite", color: "#9ca3af" }, children: /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "3", fill: "none", strokeDasharray: "31.4 31.4", strokeLinecap: "round" }) }),
+          /* @__PURE__ */ jsx2("style", { children: `@keyframes spin { to { transform: rotate(360deg); } }` })
+        ]
       }
     );
   }

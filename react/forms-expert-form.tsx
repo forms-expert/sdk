@@ -310,13 +310,17 @@ export function FormsExpertForm({
       <div
         className={className}
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: '2rem',
-          textAlign: 'center',
-          color: styling.textColor,
           ...style,
         }}
       >
-        Loading form...
+        <svg width="24" height="24" viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite', color: '#9ca3af' }}>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="31.4 31.4" strokeLinecap="round"/>
+        </svg>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
