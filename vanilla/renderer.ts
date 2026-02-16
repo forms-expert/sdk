@@ -147,11 +147,13 @@ export function renderField(
   group.className = 'forms-expert-group';
   
   // Label
-  const label = document.createElement('label');
-  label.className = 'forms-expert-label';
-  label.htmlFor = `mira-field-${field.name}`;
-  label.innerHTML = `${escapeHtml(field.label || field.name)}${field.required ? '<span class="forms-expert-required">*</span>' : ''}`;
-  group.appendChild(label);
+  if (field.label) {
+    const label = document.createElement('label');
+    label.className = 'forms-expert-label';
+    label.htmlFor = `mira-field-${field.name}`;
+    label.innerHTML = `${escapeHtml(field.label)}${field.required ? '<span class="forms-expert-required">*</span>' : ''}`;
+    group.appendChild(label);
+  }
   
   // Input wrapper
   const wrapper = document.createElement('div');
@@ -725,7 +727,10 @@ export function renderForm(
   // Inline secondary button (right or default)
   if (sec?.enabled && sec.position !== 'left' && sec.position !== 'below') {
     const link = createSecondaryLink();
-    if (link) btnWrapper.appendChild(link);
+    if (link) {
+      link.style.marginLeft = 'auto';
+      btnWrapper.appendChild(link);
+    }
   }
 
   form.appendChild(btnWrapper);

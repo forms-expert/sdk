@@ -1056,7 +1056,7 @@ function FormsExpertForm({
                   children: form.isLoading ? "Submitting..." : resolvedButtonText
                 }
               ),
-              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: secStyle, children: sec.text || "Learn More" })
+              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, marginLeft: "auto" }, children: sec.text || "Learn More" })
             ] }),
             sec?.enabled && secStyle && sec.position === "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
               display: "flex",
@@ -1176,18 +1176,18 @@ function FormFieldInput({
           style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, children: [
+      (field.label || field.type === "consent" && field.consentText) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, children: [
         field.type === "consent" && field.consentText ? field.consentUrl ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { children: [
           field.consentText,
           " ",
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: field.consentUrl, target: "_blank", rel: "noopener noreferrer", style: { color: styling.primaryColor }, children: "(link)" })
-        ] }) : field.consentText : field.label || field.name,
+        ] }) : field.consentText : field.label,
         field.required && !styling.hideRequiredAsterisk && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#ef4444", marginLeft: "0.25rem" }, children: "*" })
       ] }),
       error && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: styling.errorColor || "#ef4444", fontSize: "0.875rem", marginLeft: "0.5rem" }, children: error })
     ] });
   }
-  const labelEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+  const labelEl = field.label ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
     "label",
     {
       htmlFor: field.name,
@@ -1197,11 +1197,11 @@ function FormFieldInput({
         ...isInline ? { width: "33%", flexShrink: 0, paddingTop: "0.5rem", marginBottom: 0 } : { marginBottom: labelSpacing }
       },
       children: [
-        field.label || field.name,
+        field.label,
         field.required && !styling.hideRequiredAsterisk && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#ef4444", marginLeft: "0.25rem" }, children: "*" })
       ]
     }
-  );
+  ) : null;
   const errorEl = error ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: styling.errorColor || "#ef4444", fontSize: "0.875rem", marginTop: "0.25rem" }, children: error }) : null;
   let fieldEl;
   if (field.type === "textarea" || field.type === "richText") {

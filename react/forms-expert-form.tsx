@@ -568,7 +568,7 @@ export function FormsExpertForm({
                 {form.isLoading ? 'Submitting...' : resolvedButtonText}
               </button>
               {sec?.enabled && secStyle && sec.position !== 'left' && sec.position !== 'below' && (
-                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={secStyle}>
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, marginLeft: 'auto' }}>
                   {sec.text || 'Learn More'}
                 </a>
               )}
@@ -726,20 +726,22 @@ function FormFieldInput({
           required={field.required}
           style={{ width: '1rem', height: '1rem', accentColor: styling.primaryColor }}
         />
-        <label htmlFor={field.name}>
-          {field.type === 'consent' && field.consentText
-            ? (field.consentUrl
-              ? <span>{field.consentText} <a href={field.consentUrl} target="_blank" rel="noopener noreferrer" style={{ color: styling.primaryColor }}>(link)</a></span>
-              : field.consentText)
-            : (field.label || field.name)}
-          {field.required && !styling.hideRequiredAsterisk && <span style={{ color: '#ef4444', marginLeft: '0.25rem' }}>*</span>}
-        </label>
+        {(field.label || (field.type === 'consent' && field.consentText)) && (
+          <label htmlFor={field.name}>
+            {field.type === 'consent' && field.consentText
+              ? (field.consentUrl
+                ? <span>{field.consentText} <a href={field.consentUrl} target="_blank" rel="noopener noreferrer" style={{ color: styling.primaryColor }}>(link)</a></span>
+                : field.consentText)
+              : field.label}
+            {field.required && !styling.hideRequiredAsterisk && <span style={{ color: '#ef4444', marginLeft: '0.25rem' }}>*</span>}
+          </label>
+        )}
         {error && <span style={{ color: styling.errorColor || '#ef4444', fontSize: '0.875rem', marginLeft: '0.5rem' }}>{error}</span>}
       </div>
     );
   }
 
-  const labelEl = (
+  const labelEl = field.label ? (
     <label
       htmlFor={field.name}
       style={{
@@ -750,10 +752,10 @@ function FormFieldInput({
           : { marginBottom: labelSpacing }),
       }}
     >
-      {field.label || field.name}
+      {field.label}
       {field.required && !styling.hideRequiredAsterisk && <span style={{ color: '#ef4444', marginLeft: '0.25rem' }}>*</span>}
     </label>
-  );
+  ) : null;
 
   const errorEl = error ? (
     <div style={{ color: styling.errorColor || '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem' }}>{error}</div>
