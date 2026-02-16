@@ -1,6 +1,6 @@
 {
   "name": "@forms.expert/sdk",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Forms SDK for submitting and rendering forms",
   "type": "module",
   "publishConfig": {
@@ -65,6 +65,7 @@
     "url": "https://github.com/forms-expert/sdk/issues"
   },
   "homepage": "https://github.com/forms-expert/sdk/blob/main/README.md",
+  "website": "https://forms.expert",
   "files": [
     "dist",
     "README.md"
