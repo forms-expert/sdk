@@ -156,7 +156,7 @@
   border-radius: ${m};
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
-  ${e.buttonStyle==="filled"?`background-color: ${p}; color: ${i||"white"}; border: none;`:`background-color: transparent; color: ${p}; border: 2px solid ${p};`}
+  ${e.buttonStyle==="filled"?`background: ${p}; color: ${i||"white"}; border: none;`:`background: transparent; color: ${p}; border: 2px solid ${p};`}
 }
 
 .forms-expert-button:hover {

@@ -1017,7 +1017,7 @@ function FormsExpertForm({
               borderRadius: btnRadius,
               cursor: form.isLoading ? "not-allowed" : "pointer",
               opacity: form.isLoading ? 0.5 : 1,
-              backgroundColor: styling.buttonStyle === "filled" ? btnBgColor : "transparent",
+              background: styling.buttonStyle === "filled" ? btnBgColor : "transparent",
               color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
               border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`
             },
