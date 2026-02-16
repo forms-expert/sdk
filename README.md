@@ -5,7 +5,7 @@ Embeddable forms SDK for submitting forms via the Forms Expert API.
 ## Installation
 
 ```bash
-npm install @forms-expert/sdk
+npm install @forms.expert/sdk
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ npm install @forms-expert/sdk
 ### Vanilla JavaScript (Module)
 
 ```javascript
-import { FormWidget } from '@forms-expert/sdk/vanilla';
+import { FormWidget } from '@forms.expert/sdk/vanilla';
 
 const widget = new FormWidget(
   {
@@ -56,7 +56,7 @@ widget.init();
 ### React
 
 ```tsx
-import { FormsExpertForm } from '@forms-expert/sdk/react';
+import { FormsExpertForm } from '@forms.expert/sdk/react';
 
 function ContactPage() {
   return (
@@ -79,7 +79,7 @@ function ContactPage() {
 ### React Hook
 
 ```tsx
-import { useForm, FormsProvider } from '@forms-expert/sdk/react';
+import { useForm, FormsProvider } from '@forms.expert/sdk/react';
 
 // With provider
 function App() {
@@ -138,7 +138,7 @@ function ContactForm() {
 
 ```vue
 <script setup>
-import { useForm } from '@forms-expert/sdk/vue';
+import { useForm } from '@forms.expert/sdk/vue';
 
 const form = useForm({
   slug: 'contact',
@@ -184,7 +184,7 @@ const handleSubmit = async () => {
 For programmatic form submission without UI:
 
 ```typescript
-import { FormsSDK } from '@forms-expert/sdk';
+import { FormsSDK } from '@forms.expert/sdk';
 
 const sdk = new FormsSDK({
   apiKey: 'pk_live_xxxxxxxxxxxx',
@@ -372,7 +372,7 @@ The form name is rendered as an `<h1>` above the form fields. Visibility is cont
 ## Error Handling
 
 ```typescript
-import { FormsError, FormValidationError } from '@forms-expert/sdk';
+import { FormsError, FormValidationError } from '@forms.expert/sdk';
 
 try {
   await sdk.submit('contact', data);
@@ -420,7 +420,7 @@ import type {
   ValidationResponse,
   SubmissionResponse,
   FormsSDKConfig,
-} from '@forms-expert/sdk';
+} from '@forms.expert/sdk';
 ```
 
 ## License
