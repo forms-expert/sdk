@@ -603,11 +603,13 @@ function FormFieldInput({
   const fontSize = getFontSize(styling.fontSize);
   const isInline = styling.labelPosition === 'left' || styling.fieldLayout === 'inline';
 
+  const isBottomBorder = styling.fieldBorderStyle === 'bottom';
   const inputStyle: CSSProperties = {
     width: '100%',
     padding: '0.5rem 0.75rem',
-    border: `1px solid ${error ? '#ef4444' : styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}`,
-    borderRadius: radius,
+    border: isBottomBorder ? 'none' : `1px solid ${error ? '#ef4444' : styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}`,
+    ...(isBottomBorder ? { borderBottom: `1px solid ${error ? '#ef4444' : styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}` } : {}),
+    borderRadius: isBottomBorder ? 0 : radius,
     fontSize,
     fontFamily: 'inherit',
     backgroundColor: styling.theme === 'dark' ? '#374151' : '#ffffff',

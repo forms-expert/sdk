@@ -187,8 +187,9 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-select {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};
-  border-radius: ${radius};
+  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
+  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
+  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : radius};
   font-size: ${fontSize};
   font-family: inherit;
   background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
@@ -241,8 +242,9 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-file {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};
-  border-radius: ${radius};
+  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
+  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
+  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : radius};
   font-size: ${fontSize};
   background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
   cursor: pointer;

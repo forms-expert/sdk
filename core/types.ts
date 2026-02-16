@@ -79,6 +79,7 @@ export interface FormStyling {
   fontFamily?: string;
   formWidth?: 'narrow' | 'medium' | 'wide' | 'full';
   fieldLayout?: 'stacked' | 'inline';
+  fieldBorderStyle?: 'full' | 'bottom';
   buttonColor?: string;
   buttonText?: string;
   buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
