@@ -3,6 +3,7 @@ import {
   FormsSDKConfig,
   FormField,
   FormStyling,
+  SecondaryButton,
   SubmissionResponse,
   ValidationError,
 } from '../core';
@@ -502,34 +503,91 @@ export function FormsExpertForm({
         <div ref={captchaContainerRef} style={{ marginTop: '1rem' }} />
       )}
 
-      <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: '1rem' }}>
-        <button
-          type="submit"
-          disabled={form.isLoading}
-          style={{
-            ...(styling.buttonAlign ? {} : { width: '100%' }),
-            padding: '0.625rem 1.25rem',
-            fontWeight: 500,
-            fontSize,
-            fontFamily: 'inherit',
-            borderRadius: btnRadius,
-            cursor: form.isLoading ? 'not-allowed' : 'pointer',
-            opacity: form.isLoading ? 0.5 : 1,
-            background:
-              styling.buttonStyle === 'filled' ? btnBgColor : 'transparent',
-            color:
-              styling.buttonStyle === 'filled'
-                ? (btnTextColor || 'white')
-                : btnBgColor,
-            border:
-              styling.buttonStyle === 'filled'
-                ? 'none'
-                : `2px solid ${btnBgColor}`,
-          }}
-        >
-          {form.isLoading ? 'Submitting...' : resolvedButtonText}
-        </button>
-      </div>
+      {(() => {
+        const btnSizeMap: Record<string, { px: string; py: string; fs: string }> = {
+          small: { px: '0.75rem', py: '0.375rem', fs: '0.875rem' },
+          medium: { px: '1.25rem', py: '0.625rem', fs: '1rem' },
+          large: { px: '1.75rem', py: '0.875rem', fs: '1.125rem' },
+        };
+        const btnSize = btnSizeMap[styling.buttonSize || 'medium'];
+        const btnPx = styling.buttonPaddingX != null ? `${styling.buttonPaddingX}px` : btnSize.px;
+        const btnPy = styling.buttonPaddingY != null ? `${styling.buttonPaddingY}px` : btnSize.py;
+        const btnBg = styling.buttonGradient || (styling.buttonStyle === 'filled' ? btnBgColor : 'transparent');
+
+        const sec = styling.secondaryButton as SecondaryButton | undefined;
+        const secColor = sec?.color || btnBgColor;
+        const secStyle: CSSProperties | undefined = sec?.enabled ? {
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: `${btnPy} ${btnPx}`,
+          fontWeight: 500,
+          fontSize: btnSize.fs,
+          fontFamily: 'inherit',
+          borderRadius: btnRadius,
+          cursor: 'pointer',
+          textDecoration: sec.style === 'link' ? 'underline' : 'none',
+          background: sec.style === 'filled' ? secColor : 'transparent',
+          color: sec.textColor || (sec.style === 'filled' ? '#ffffff' : secColor),
+          border: sec.style === 'outlined' ? `2px solid ${secColor}` : 'none',
+          marginTop: sec.marginTop != null ? `${sec.marginTop}px` : undefined,
+          marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : undefined,
+        } : undefined;
+
+        return (
+          <>
+            <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {sec?.enabled && secStyle && sec.position === 'left' && (
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={secStyle}>
+                  {sec.text || 'Learn More'}
+                </a>
+              )}
+              <button
+                type="submit"
+                disabled={form.isLoading}
+                style={{
+                  ...(styling.buttonFullWidth ? { width: '100%' } : (styling.buttonAlign ? {} : { width: '100%' })),
+                  padding: `${btnPy} ${btnPx}`,
+                  fontWeight: 500,
+                  fontSize: btnSize.fs,
+                  fontFamily: 'inherit',
+                  borderRadius: btnRadius,
+                  cursor: form.isLoading ? 'not-allowed' : 'pointer',
+                  opacity: form.isLoading ? 0.5 : 1,
+                  background: btnBg,
+                  color:
+                    styling.buttonStyle === 'filled'
+                      ? (btnTextColor || 'white')
+                      : btnBgColor,
+                  border:
+                    styling.buttonStyle === 'filled'
+                      ? 'none'
+                      : `2px solid ${btnBgColor}`,
+                }}
+              >
+                {form.isLoading ? 'Submitting...' : resolvedButtonText}
+              </button>
+              {sec?.enabled && secStyle && sec.position !== 'left' && sec.position !== 'below' && (
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={secStyle}>
+                  {sec.text || 'Learn More'}
+                </a>
+              )}
+            </div>
+            {sec?.enabled && secStyle && sec.position === 'below' && (
+              <div style={{
+                display: 'flex',
+                justifyContent: sec.align === 'center' ? 'center' : sec.align === 'right' ? 'flex-end' : sec.align === 'left' ? 'flex-start' : btnAlign,
+                marginTop: sec.marginTop != null ? `${sec.marginTop}px` : '0.5rem',
+                marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : undefined,
+              }}>
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, marginTop: 0, marginBottom: 0 }}>
+                  {sec.text || 'Learn More'}
+                </a>
+              </div>
+            )}
+          </>
+        );
+      })()}
 
       {showBranding && (
         <div

@@ -48,6 +48,22 @@ interface FormField {
     };
 }
 /**
+ * Secondary button configuration
+ */
+interface SecondaryButton {
+    enabled: boolean;
+    text: string;
+    href: string;
+    openInNewTab?: boolean;
+    position?: 'left' | 'right' | 'below';
+    align?: 'left' | 'center' | 'right';
+    marginTop?: number;
+    marginBottom?: number;
+    style?: 'filled' | 'outlined' | 'minimal' | 'link';
+    color?: string;
+    textColor?: string;
+}
+/**
  * Form styling configuration
  */
 interface FormStyling {
@@ -65,10 +81,16 @@ interface FormStyling {
     fontFamily?: string;
     formWidth?: 'narrow' | 'medium' | 'wide' | 'full';
     fieldLayout?: 'stacked' | 'inline';
+    fieldBorderStyle?: 'full' | 'bottom';
     buttonColor?: string;
     buttonText?: string;
     buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     buttonAlign?: 'left' | 'center' | 'right';
+    buttonSize?: 'small' | 'medium' | 'large';
+    buttonPaddingX?: number;
+    buttonPaddingY?: number;
+    buttonGradient?: string;
+    buttonFullWidth?: boolean;
     fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
     formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
     labelSpacing?: 'compact' | 'normal' | 'relaxed';
@@ -82,6 +104,7 @@ interface FormStyling {
     backgroundImageUrl?: string;
     backgroundOverlay?: number;
     transparentBackground?: boolean;
+    secondaryButton?: SecondaryButton;
 }
 /**
  * Form schema
@@ -133,6 +156,8 @@ declare function renderForm(schema: FormSchema, values?: Record<string, unknown>
     hideRequiredAsterisk?: boolean;
     formName?: string;
     showFormName?: boolean;
+    secondaryButton?: SecondaryButton;
+    buttonAlign?: string;
 }): HTMLFormElement;
 /**
  * Render success message

@@ -61,6 +61,23 @@ export interface FormField {
 }
 
 /**
+ * Secondary button configuration
+ */
+export interface SecondaryButton {
+  enabled: boolean;
+  text: string;
+  href: string;
+  openInNewTab?: boolean;
+  position?: 'left' | 'right' | 'below';
+  align?: 'left' | 'center' | 'right';
+  marginTop?: number;
+  marginBottom?: number;
+  style?: 'filled' | 'outlined' | 'minimal' | 'link';
+  color?: string;
+  textColor?: string;
+}
+
+/**
  * Form styling configuration
  */
 export interface FormStyling {
@@ -84,6 +101,11 @@ export interface FormStyling {
   buttonText?: string;
   buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
   buttonAlign?: 'left' | 'center' | 'right';
+  buttonSize?: 'small' | 'medium' | 'large';
+  buttonPaddingX?: number;
+  buttonPaddingY?: number;
+  buttonGradient?: string;
+  buttonFullWidth?: boolean;
   fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
   formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
   labelSpacing?: 'compact' | 'normal' | 'relaxed';
@@ -97,6 +119,7 @@ export interface FormStyling {
   backgroundImageUrl?: string;
   backgroundOverlay?: number;
   transparentBackground?: boolean;
+  secondaryButton?: SecondaryButton;
 }
 
 /**

@@ -128,6 +128,8 @@ export class FormWidget {
       hideRequiredAsterisk: mergedStyling.hideRequiredAsterisk,
       formName: this.config.hostedConfig?.pageTitle as string || this.config.name,
       showFormName: this.config.settings?.showFormName as boolean | undefined,
+      secondaryButton: mergedStyling.secondaryButton,
+      buttonAlign: mergedStyling.buttonAlign,
     });
 
     // Handle input changes

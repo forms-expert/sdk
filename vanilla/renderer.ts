@@ -1,4 +1,4 @@
-import { FormField, FormSchema, FormStyling, ValidationError } from '../core/types';
+import { FormField, FormSchema, FormStyling, SecondaryButton, ValidationError } from '../core/types';
 
 /**
  * Escape HTML special characters
@@ -609,6 +609,8 @@ export function renderForm(
     hideRequiredAsterisk?: boolean;
     formName?: string;
     showFormName?: boolean;
+    secondaryButton?: SecondaryButton;
+    buttonAlign?: string;
   } = {}
 ): HTMLFormElement {
   const form = document.createElement('form');
@@ -657,6 +659,10 @@ export function renderForm(
   pageUrl.value = typeof window !== 'undefined' ? window.location.href : '';
   form.appendChild(pageUrl);
   
+  // Button wrapper
+  const btnWrapper = document.createElement('div');
+  btnWrapper.className = 'forms-expert-button-wrapper';
+
   // Submit button
   const button = document.createElement('button');
   button.type = 'submit';
@@ -673,8 +679,73 @@ export function renderForm(
   } else {
     button.textContent = options.submitText || 'Submit';
   }
-  
-  form.appendChild(button);
+
+  // Secondary button helper
+  const sec = options.secondaryButton;
+  const createSecondaryLink = (): HTMLAnchorElement | null => {
+    if (!sec?.enabled) return null;
+    const a = document.createElement('a');
+    a.className = 'forms-expert-secondary-btn';
+    a.href = sec.href || '#';
+    a.textContent = sec.text || 'Learn More';
+    if (sec.openInNewTab) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    const btnColor = styling?.primaryColor || '#3b82f6';
+    const secColor = sec.color || btnColor;
+    if (sec.style === 'filled') {
+      a.style.background = secColor;
+      a.style.color = sec.textColor || '#ffffff';
+      a.style.border = 'none';
+    } else if (sec.style === 'outlined') {
+      a.style.background = 'transparent';
+      a.style.color = sec.textColor || secColor;
+      a.style.border = `2px solid ${secColor}`;
+    } else if (sec.style === 'link') {
+      a.style.background = 'transparent';
+      a.style.color = sec.textColor || secColor;
+      a.style.border = 'none';
+      a.style.textDecoration = 'underline';
+    } else {
+      a.style.background = 'transparent';
+      a.style.color = sec.textColor || secColor;
+      a.style.border = 'none';
+    }
+    if (sec.marginTop != null) a.style.marginTop = `${sec.marginTop}px`;
+    if (sec.marginBottom != null) a.style.marginBottom = `${sec.marginBottom}px`;
+    return a;
+  };
+
+  // Inline secondary button (left)
+  if (sec?.enabled && sec.position === 'left') {
+    const link = createSecondaryLink();
+    if (link) btnWrapper.appendChild(link);
+  }
+
+  btnWrapper.appendChild(button);
+
+  // Inline secondary button (right or default)
+  if (sec?.enabled && sec.position !== 'left' && sec.position !== 'below') {
+    const link = createSecondaryLink();
+    if (link) btnWrapper.appendChild(link);
+  }
+
+  form.appendChild(btnWrapper);
+
+  // Secondary button (below)
+  if (sec?.enabled && sec.position === 'below') {
+    const belowDiv = document.createElement('div');
+    belowDiv.className = 'forms-expert-secondary-below';
+    const secAlign = sec.align || options.buttonAlign || 'left';
+    belowDiv.style.justifyContent = secAlign === 'center' ? 'center' : secAlign === 'right' ? 'flex-end' : 'flex-start';
+    if (sec.marginTop != null) belowDiv.style.marginTop = `${sec.marginTop}px`;
+    if (sec.marginBottom != null) belowDiv.style.marginBottom = `${sec.marginBottom}px`;
+    const link = createSecondaryLink();
+    if (link) {
+      link.style.marginTop = '0';
+      link.style.marginBottom = '0';
+      belowDiv.appendChild(link);
+    }
+    form.appendChild(belowDiv);
+  }
   
   // Branding
   if (options.showBranding !== false) {

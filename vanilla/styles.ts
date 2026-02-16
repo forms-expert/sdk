@@ -108,6 +108,16 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   const fontFamily = s.fontFamily || 'system-ui, -apple-system, sans-serif';
   const btnAlign = getButtonAlign(s.buttonAlign);
 
+  const btnSizeMap: Record<string, { px: string; py: string; fs: string }> = {
+    small: { px: '0.75rem', py: '0.375rem', fs: '0.875rem' },
+    medium: { px: '1.25rem', py: '0.625rem', fs: '1rem' },
+    large: { px: '1.75rem', py: '0.875rem', fs: '1.125rem' },
+  };
+  const btnSize = btnSizeMap[s.buttonSize || 'medium'];
+  const btnPx = s.buttonPaddingX != null ? `${s.buttonPaddingX}px` : btnSize.px;
+  const btnPy = s.buttonPaddingY != null ? `${s.buttonPaddingY}px` : btnSize.py;
+  const btnBg = s.buttonGradient || (s.buttonStyle === 'filled' ? btnBgColor : 'transparent');
+
   return `
 .forms-expert-wrapper {
   ${s.backgroundImageUrl ? `background-image: url(${s.backgroundImageUrl}); background-size: cover; background-position: center;` : ''}
@@ -260,19 +270,21 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   display: flex;
   justify-content: ${btnAlign};
   margin-top: 1rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .forms-expert-button {
-  ${s.buttonAlign ? '' : 'width: 100%;'}
-  padding: 0.625rem 1.25rem;
+  ${s.buttonFullWidth ? 'width: 100%;' : (s.buttonAlign ? '' : 'width: 100%;')}
+  padding: ${btnPy} ${btnPx};
   font-weight: 500;
-  font-size: ${fontSize};
+  font-size: ${btnSize.fs};
   font-family: inherit;
   border-radius: ${btnRadius};
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
   ${s.buttonStyle === 'filled' 
-    ? `background: ${btnBgColor}; color: ${btnTextColor || 'white'}; border: none;`
+    ? `background: ${btnBg}; color: ${btnTextColor || 'white'}; border: none;`
     : `background: transparent; color: ${btnBgColor}; border: 2px solid ${btnBgColor};`
   }
 }
@@ -351,6 +363,26 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 
 .forms-expert-branding a:hover {
   text-decoration: underline;
+}
+
+.forms-expert-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  font-size: ${fontSize};
+  font-family: inherit;
+  border-radius: ${btnRadius};
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+.forms-expert-secondary-btn:hover { opacity: 0.9; }
+
+.forms-expert-secondary-below {
+  display: flex;
+  margin-top: 0.5rem;
 }
 
 /* Rating stars */

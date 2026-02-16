@@ -529,7 +529,7 @@ function useForm(options) {
 
 // react/forms-expert-form.tsx
 import { useState as useState2, useEffect as useEffect2, useRef, useMemo as useMemo2 } from "react";
-import { jsx as jsx2, jsxs } from "react/jsx-runtime";
+import { Fragment, jsx as jsx2, jsxs } from "react/jsx-runtime";
 var defaultStyling = {
   theme: "light",
   primaryColor: "#3b82f6",
@@ -981,27 +981,69 @@ function FormsExpertForm({
         )),
         form.honeypotEnabled && /* @__PURE__ */ jsx2("div", { style: { position: "absolute", left: "-9999px", opacity: 0, height: 0, overflow: "hidden" }, "aria-hidden": "true", children: /* @__PURE__ */ jsx2("input", { type: "text", name: "_hp", tabIndex: -1, autoComplete: "off" }) }),
         form.requiresCaptcha && form.captchaProvider !== "recaptcha" && /* @__PURE__ */ jsx2("div", { ref: captchaContainerRef, style: { marginTop: "1rem" } }),
-        /* @__PURE__ */ jsx2("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: "1rem" }, children: /* @__PURE__ */ jsx2(
-          "button",
-          {
-            type: "submit",
-            disabled: form.isLoading,
-            style: {
-              ...styling.buttonAlign ? {} : { width: "100%" },
-              padding: "0.625rem 1.25rem",
-              fontWeight: 500,
-              fontSize,
-              fontFamily: "inherit",
-              borderRadius: btnRadius,
-              cursor: form.isLoading ? "not-allowed" : "pointer",
-              opacity: form.isLoading ? 0.5 : 1,
-              background: styling.buttonStyle === "filled" ? btnBgColor : "transparent",
-              color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
-              border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`
-            },
-            children: form.isLoading ? "Submitting..." : resolvedButtonText
-          }
-        ) }),
+        (() => {
+          const btnSizeMap = {
+            small: { px: "0.75rem", py: "0.375rem", fs: "0.875rem" },
+            medium: { px: "1.25rem", py: "0.625rem", fs: "1rem" },
+            large: { px: "1.75rem", py: "0.875rem", fs: "1.125rem" }
+          };
+          const btnSize = btnSizeMap[styling.buttonSize || "medium"];
+          const btnPx = styling.buttonPaddingX != null ? `${styling.buttonPaddingX}px` : btnSize.px;
+          const btnPy = styling.buttonPaddingY != null ? `${styling.buttonPaddingY}px` : btnSize.py;
+          const btnBg = styling.buttonGradient || (styling.buttonStyle === "filled" ? btnBgColor : "transparent");
+          const sec = styling.secondaryButton;
+          const secColor = sec?.color || btnBgColor;
+          const secStyle = sec?.enabled ? {
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: `${btnPy} ${btnPx}`,
+            fontWeight: 500,
+            fontSize: btnSize.fs,
+            fontFamily: "inherit",
+            borderRadius: btnRadius,
+            cursor: "pointer",
+            textDecoration: sec.style === "link" ? "underline" : "none",
+            background: sec.style === "filled" ? secColor : "transparent",
+            color: sec.textColor || (sec.style === "filled" ? "#ffffff" : secColor),
+            border: sec.style === "outlined" ? `2px solid ${secColor}` : "none",
+            marginTop: sec.marginTop != null ? `${sec.marginTop}px` : void 0,
+            marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
+          } : void 0;
+          return /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsxs("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
+              sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ jsx2("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: secStyle, children: sec.text || "Learn More" }),
+              /* @__PURE__ */ jsx2(
+                "button",
+                {
+                  type: "submit",
+                  disabled: form.isLoading,
+                  style: {
+                    ...styling.buttonFullWidth ? { width: "100%" } : styling.buttonAlign ? {} : { width: "100%" },
+                    padding: `${btnPy} ${btnPx}`,
+                    fontWeight: 500,
+                    fontSize: btnSize.fs,
+                    fontFamily: "inherit",
+                    borderRadius: btnRadius,
+                    cursor: form.isLoading ? "not-allowed" : "pointer",
+                    opacity: form.isLoading ? 0.5 : 1,
+                    background: btnBg,
+                    color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
+                    border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`
+                  },
+                  children: form.isLoading ? "Submitting..." : resolvedButtonText
+                }
+              ),
+              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ jsx2("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: secStyle, children: sec.text || "Learn More" })
+            ] }),
+            sec?.enabled && secStyle && sec.position === "below" && /* @__PURE__ */ jsx2("div", { style: {
+              display: "flex",
+              justifyContent: sec.align === "center" ? "center" : sec.align === "right" ? "flex-end" : sec.align === "left" ? "flex-start" : btnAlign,
+              marginTop: sec.marginTop != null ? `${sec.marginTop}px` : "0.5rem",
+              marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
+            }, children: /* @__PURE__ */ jsx2("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, marginTop: 0, marginBottom: 0 }, children: sec.text || "Learn More" }) })
+          ] });
+        })(),
         showBranding && /* @__PURE__ */ jsx2(
           "div",
           {
@@ -1057,11 +1099,13 @@ function FormFieldInput({
   const radius = getBorderRadius(styling.borderRadius);
   const fontSize = getFontSize(styling.fontSize);
   const isInline = styling.labelPosition === "left" || styling.fieldLayout === "inline";
+  const isBottomBorder = styling.fieldBorderStyle === "bottom";
   const inputStyle = {
     width: "100%",
     padding: "0.5rem 0.75rem",
-    border: `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}`,
-    borderRadius: radius,
+    border: isBottomBorder ? "none" : `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}`,
+    ...isBottomBorder ? { borderBottom: `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } : {},
+    borderRadius: isBottomBorder ? 0 : radius,
     fontSize,
     fontFamily: "inherit",
     backgroundColor: styling.theme === "dark" ? "#374151" : "#ffffff",
