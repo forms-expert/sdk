@@ -270,8 +270,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
   ${s.buttonStyle === 'filled' 
-    ? `background-color: ${btnBgColor}; color: ${btnTextColor || 'white'}; border: none;`
-    : `background-color: transparent; color: ${btnBgColor}; border: 2px solid ${btnBgColor};`
+    ? `background: ${btnBgColor}; color: ${btnTextColor || 'white'}; border: none;`
+    : `background: transparent; color: ${btnBgColor}; border: 2px solid ${btnBgColor};`
   }
 }
 
