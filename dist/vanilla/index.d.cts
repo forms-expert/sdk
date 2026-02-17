@@ -219,6 +219,10 @@ declare class FormWidget {
      */
     private injectStyles;
     /**
+     * Inject Google Font stylesheet if needed
+     */
+    private injectGoogleFont;
+    /**
      * Render the form
      */
     private render;

@@ -106,9 +106,10 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   const btnBgColor = s.primaryColor;
   const btnTextColor = s.buttonColor;
   // Normalize font family - support legacy single values by adding fallbacks
+  // For SDK embedded forms, default to 'inherit' so the form uses the website's font
   const fontFamily = s.fontFamily 
     ? (s.fontFamily.includes(',') ? s.fontFamily : `${s.fontFamily}, sans-serif`)
-    : 'system-ui, -apple-system, sans-serif';
+    : 'inherit';
   const btnAlign = getButtonAlign(s.buttonAlign);
 
   const btnSizeMap: Record<string, { px: string; py: string; fs: string }> = {

@@ -99,6 +99,30 @@ export class FormWidget {
     const mergedStyling = { ...this.config?.schema?.styling, ...this.config?.styling } as FormStyling | undefined;
     this.styleEl.textContent = generateFormStyles(mergedStyling);
     document.head.appendChild(this.styleEl);
+
+    // Load Google Font if needed
+    this.injectGoogleFont(mergedStyling?.fontFamily);
+  }
+
+  /**
+   * Inject Google Font stylesheet if needed
+   */
+  private injectGoogleFont(fontFamily?: string): void {
+    if (!fontFamily) return;
+    
+    const googleFonts = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Poppins', 'Montserrat', 'Nunito', 'Source Sans Pro', 'Raleway', 'Ubuntu', 'Playfair Display', 'Merriweather'];
+    const fontToLoad = fontFamily.split(',')[0]?.trim();
+    
+    if (!fontToLoad || !googleFonts.includes(fontToLoad)) return;
+    
+    const linkId = `forms-expert-font-${this.options.slug}`;
+    if (document.getElementById(linkId)) return;
+    
+    const link = document.createElement('link');
+    link.id = linkId;
+    link.rel = 'stylesheet';
+    link.href = `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, '+')}:wght@400;500;600;700&display=swap`;
+    document.head.appendChild(link);
   }
 
   /**

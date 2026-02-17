@@ -281,11 +281,19 @@ export function FormsExpertForm({
   const btnBgColor = styling.primaryColor;
   const btnTextColor = styling.buttonColor;
   // Normalize font family - support legacy single values by adding fallbacks
+  // For SDK embedded forms, default to 'inherit' so the form uses the website's font
   const fontFamily = styling.fontFamily 
     ? (styling.fontFamily.includes(',') ? styling.fontFamily : `${styling.fontFamily}, sans-serif`)
-    : 'system-ui, -apple-system, sans-serif';
+    : 'inherit';
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
+
+  // Google Fonts that need to be loaded
+  const googleFonts = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Poppins', 'Montserrat', 'Nunito', 'Source Sans Pro', 'Raleway', 'Ubuntu', 'Playfair Display', 'Merriweather'];
+  const fontToLoad = styling.fontFamily?.split(',')[0]?.trim();
+  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad)
+    ? `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, '+')}:wght@400;500;600;700&display=swap`
+    : null;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -461,6 +469,10 @@ export function FormsExpertForm({
         ...style,
       }}
     >
+      {/* Load Google Font if needed */}
+      {googleFontUrl && (
+        <link rel="stylesheet" href={googleFontUrl} />
+      )}
       {/* Scoped placeholder styles */}
       <style dangerouslySetInnerHTML={{ __html: `
         form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }

@@ -809,9 +809,12 @@ function FormsExpertForm({
   const formMaxWidth = getFormMaxWidth(styling.formWidth);
   const btnBgColor = styling.primaryColor;
   const btnTextColor = styling.buttonColor;
-  const fontFamily = styling.fontFamily ? styling.fontFamily.includes(",") ? styling.fontFamily : `${styling.fontFamily}, sans-serif` : "system-ui, -apple-system, sans-serif";
+  const fontFamily = styling.fontFamily ? styling.fontFamily.includes(",") ? styling.fontFamily : `${styling.fontFamily}, sans-serif` : "inherit";
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
+  const googleFonts = ["Inter", "Roboto", "Open Sans", "Lato", "Poppins", "Montserrat", "Nunito", "Source Sans Pro", "Raleway", "Ubuntu", "Playfair Display", "Merriweather"];
+  const fontToLoad = styling.fontFamily?.split(",")[0]?.trim();
+  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad) ? `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, "+")}:wght@400;500;600;700&display=swap` : null;
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await form.submit(captchaToken || void 0);
@@ -980,6 +983,7 @@ function FormsExpertForm({
         ...style
       },
       children: [
+        googleFontUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("link", { rel: "stylesheet", href: googleFontUrl }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { dangerouslySetInnerHTML: { __html: `
         form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:hover:not(:disabled) { filter: brightness(0.9); }
