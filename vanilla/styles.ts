@@ -220,9 +220,10 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-input:focus,
 .forms-expert-textarea:focus,
 .forms-expert-select:focus {
-  outline: none;
-  border-color: ${s.primaryColor};
-  box-shadow: 0 0 0 2px ${s.primaryColor}33;
+  outline: none !important;
+  border-color: ${s.primaryColor} !important;
+  box-shadow: 0 0 0 2px ${s.primaryColor}33 !important;
+  -webkit-appearance: none;
 }
 
 .forms-expert-input.forms-expert-error,

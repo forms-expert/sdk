@@ -124,7 +124,7 @@ interface FormsExpertFormProps {
   config?: FormsSDKConfig;
   /** Form slug */
   slug: string;
-  /** Track form views for analytics (completion rate). Default: false */
+  /** Track form views for analytics (completion rate). Default: true */
   trackViews?: boolean;
   /** Custom submit button text */
   submitText?: string;
@@ -148,7 +148,7 @@ interface FormsExpertFormProps {
 export function FormsExpertForm({
   config,
   slug,
-  trackViews,
+  trackViews = true,
   submitText = 'Submit',
   onSuccess,
   onError,
@@ -480,6 +480,14 @@ export function FormsExpertForm({
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+        form[data-fe-scope="${formScopeId}"] input:focus,
+        form[data-fe-scope="${formScopeId}"] textarea:focus,
+        form[data-fe-scope="${formScopeId}"] select:focus {
+          outline: none !important;
+          border-color: ${styling.primaryColor || '#3b82f6'} !important;
+          box-shadow: 0 0 0 2px ${styling.primaryColor || '#3b82f6'}33 !important;
+          -webkit-appearance: none;
+        }
       ` }} />
       {/* Logo */}
       {styling.logoUrl && (

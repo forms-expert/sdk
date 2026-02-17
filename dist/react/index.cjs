@@ -697,7 +697,7 @@ function getParagraphSize(size) {
 function FormsExpertForm({
   config,
   slug,
-  trackViews,
+  trackViews = true,
   submitText = "Submit",
   onSuccess,
   onError,
@@ -990,6 +990,14 @@ function FormsExpertForm({
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+        form[data-fe-scope="${formScopeId}"] input:focus,
+        form[data-fe-scope="${formScopeId}"] textarea:focus,
+        form[data-fe-scope="${formScopeId}"] select:focus {
+          outline: none !important;
+          border-color: ${styling.primaryColor || "#3b82f6"} !important;
+          box-shadow: 0 0 0 2px ${styling.primaryColor || "#3b82f6"}33 !important;
+          -webkit-appearance: none;
+        }
       ` } }),
         styling.logoUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
           textAlign: styling.logoPosition === "top-left" ? "left" : styling.logoPosition === "top-right" ? "right" : "center",

@@ -504,7 +504,7 @@ interface FormsExpertFormProps {
     config?: FormsSDKConfig;
     /** Form slug */
     slug: string;
-    /** Track form views for analytics (completion rate). Default: false */
+    /** Track form views for analytics (completion rate). Default: true */
     trackViews?: boolean;
     /** Custom submit button text */
     submitText?: string;

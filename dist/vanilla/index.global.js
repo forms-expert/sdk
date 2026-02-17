@@ -92,9 +92,10 @@
 .forms-expert-input:focus,
 .forms-expert-textarea:focus,
 .forms-expert-select:focus {
-  outline: none;
-  border-color: ${e.primaryColor};
-  box-shadow: 0 0 0 2px ${e.primaryColor}33;
+  outline: none !important;
+  border-color: ${e.primaryColor} !important;
+  box-shadow: 0 0 0 2px ${e.primaryColor}33 !important;
+  -webkit-appearance: none;
 }
 
 .forms-expert-input.forms-expert-error,
