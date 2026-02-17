@@ -144,7 +144,7 @@ export interface UseFormReturn {
  */
 export function useForm(options: UseFormOptions): UseFormReturn {
   const context = useContext(FormsContext);
-  
+
   // Create SDK if config provided, otherwise use context
   const sdk = useMemo(() => {
     if (options.config) {
@@ -166,26 +166,29 @@ export function useForm(options: UseFormOptions): UseFormReturn {
   const [error, setError] = useState<Error | null>(null);
   const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
 
+  // Extract values to avoid stale closure issues
+  const { slug, trackViews, lang, autoInit, onSuccess, onError, onValidationError } = options;
+
   const initialize = useCallback(async () => {
     setIsInitializing(true);
     try {
-      const formConfig = await sdk.isActive(options.slug, options.lang);
+      const formConfig = await sdk.isActive(slug, lang);
       setConfig(formConfig);
-      if (options.trackViews) {
-        sdk.trackView(options.slug);
+      if (trackViews) {
+        void sdk.trackView(slug);
       }
       return formConfig;
     } finally {
       setIsInitializing(false);
     }
-  }, [sdk, options.slug, options.trackViews, options.lang]);
+  }, [sdk, slug, trackViews, lang]);
 
   // Auto-initialize
   useEffect(() => {
-    if (options.autoInit !== false) {
+    if (autoInit !== false) {
       initialize();
     }
-  }, [initialize, options.autoInit]);
+  }, [initialize, autoInit]);
 
   const setValue = useCallback((name: string, value: unknown) => {
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -204,7 +207,7 @@ export function useForm(options: UseFormOptions): UseFormReturn {
   }, []);
 
   const validate = useCallback(async () => {
-    const result = await sdk.validate(options.slug, values);
+    const result = await sdk.validate(slug, values);
     if (!result.valid) {
       const errorMap = result.errors.reduce(
         (acc, err) => ({ ...acc, [err.field]: err.message }),
@@ -213,7 +216,7 @@ export function useForm(options: UseFormOptions): UseFormReturn {
       setErrors(errorMap);
     }
     return result.valid;
-  }, [sdk, options.slug, values]);
+  }, [sdk, slug, values]);
 
   const submit = useCallback(
     async (captchaToken?: string) => {
@@ -229,12 +232,12 @@ export function useForm(options: UseFormOptions): UseFormReturn {
           ? { ...values, _hp: '' }
           : values;
 
-        const response = await sdk.submit(options.slug, submitData, {
+        const response = await sdk.submit(slug, submitData, {
           captchaToken,
           onProgress: setUploadProgress,
         });
         setIsSubmitted(true);
-        options.onSuccess?.(response);
+        onSuccess?.(response);
         return response;
       } catch (err) {
         if (err instanceof FormValidationError) {
@@ -243,10 +246,10 @@ export function useForm(options: UseFormOptions): UseFormReturn {
             {}
           );
           setErrors(errorMap);
-          options.onValidationError?.(err.errors);
+          onValidationError?.(err.errors);
         } else {
           setError(err as Error);
-          options.onError?.(err as Error);
+          onError?.(err as Error);
         }
         return null;
       } finally {
@@ -254,7 +257,7 @@ export function useForm(options: UseFormOptions): UseFormReturn {
         setUploadProgress(null);
       }
     },
-    [sdk, options, values]
+    [sdk, slug, values, config?.settings?.honeypot, onSuccess, onError, onValidationError]
   );
 
   const reset = useCallback(() => {

@@ -378,24 +378,25 @@ function useForm(options) {
   const [values, setValues] = useState({});
   const [error, setError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(null);
+  const { slug, trackViews, lang, autoInit, onSuccess, onError, onValidationError } = options;
   const initialize = useCallback(async () => {
     setIsInitializing(true);
     try {
-      const formConfig = await sdk.isActive(options.slug, options.lang);
+      const formConfig = await sdk.isActive(slug, lang);
       setConfig(formConfig);
-      if (options.trackViews) {
-        sdk.trackView(options.slug);
+      if (trackViews) {
+        void sdk.trackView(slug);
       }
       return formConfig;
     } finally {
       setIsInitializing(false);
     }
-  }, [sdk, options.slug, options.trackViews, options.lang]);
+  }, [sdk, slug, trackViews, lang]);
   useEffect(() => {
-    if (options.autoInit !== false) {
+    if (autoInit !== false) {
       initialize();
     }
-  }, [initialize, options.autoInit]);
+  }, [initialize, autoInit]);
   const setValue = useCallback((name, value) => {
     setValues((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => {
@@ -410,7 +411,7 @@ function useForm(options) {
     setValues((prev) => ({ ...prev, ...newValues }));
   }, []);
   const validate = useCallback(async () => {
-    const result = await sdk.validate(options.slug, values);
+    const result = await sdk.validate(slug, values);
     if (!result.valid) {
       const errorMap = result.errors.reduce(
         (acc, err) => ({ ...acc, [err.field]: err.message }),
@@ -419,7 +420,7 @@ function useForm(options) {
       setErrors(errorMap);
     }
     return result.valid;
-  }, [sdk, options.slug, values]);
+  }, [sdk, slug, values]);
   const submit = useCallback(
     async (captchaToken) => {
       setIsLoading(true);
@@ -429,12 +430,12 @@ function useForm(options) {
       setUploadProgress(null);
       try {
         const submitData = config?.settings?.honeypot ? { ...values, _hp: "" } : values;
-        const response = await sdk.submit(options.slug, submitData, {
+        const response = await sdk.submit(slug, submitData, {
           captchaToken,
           onProgress: setUploadProgress
         });
         setIsSubmitted(true);
-        options.onSuccess?.(response);
+        onSuccess?.(response);
         return response;
       } catch (err) {
         if (err instanceof FormValidationError) {
@@ -443,10 +444,10 @@ function useForm(options) {
             {}
           );
           setErrors(errorMap);
-          options.onValidationError?.(err.errors);
+          onValidationError?.(err.errors);
         } else {
           setError(err);
-          options.onError?.(err);
+          onError?.(err);
         }
         return null;
       } finally {
@@ -454,7 +455,7 @@ function useForm(options) {
         setUploadProgress(null);
       }
     },
-    [sdk, options, values]
+    [sdk, slug, values, config?.settings?.honeypot, onSuccess, onError, onValidationError]
   );
   const reset = useCallback(() => {
     setValues({});
