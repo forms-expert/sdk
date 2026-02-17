@@ -130,6 +130,8 @@ export class FormWidget {
       showFormName: this.config.settings?.showFormName as boolean | undefined,
       secondaryButton: mergedStyling.secondaryButton,
       buttonAlign: mergedStyling.buttonAlign,
+      formNameFontSize: mergedStyling.formNameFontSize,
+      formNameFontWeight: mergedStyling.formNameFontWeight,
     });
 
     // Handle input changes

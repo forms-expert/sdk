@@ -959,8 +959,8 @@ function FormsExpertForm({
           }
         ),
         form.config.settings?.showFormName !== false && form.config.name && /* @__PURE__ */ jsx2("h1", { style: {
-          fontSize: "1.5rem",
-          fontWeight: 700,
+          fontSize: styling.formNameFontSize != null ? `${styling.formNameFontSize}px` : "1.5rem",
+          fontWeight: styling.formNameFontWeight === "normal" ? 400 : styling.formNameFontWeight === "medium" ? 500 : styling.formNameFontWeight === "semibold" ? 600 : 700,
           marginBottom: "0.5rem",
           color: styling.textColor
         }, children: form.config.hostedConfig?.pageTitle || form.config.name }),
@@ -990,6 +990,7 @@ function FormsExpertForm({
           const btnSize = btnSizeMap[styling.buttonSize || "medium"];
           const btnPx = styling.buttonPaddingX != null ? `${styling.buttonPaddingX}px` : btnSize.px;
           const btnPy = styling.buttonPaddingY != null ? `${styling.buttonPaddingY}px` : btnSize.py;
+          const btnFs = styling.buttonFontSize != null ? `${styling.buttonFontSize}px` : btnSize.fs;
           const btnBg = styling.buttonGradient || (styling.buttonStyle === "filled" ? btnBgColor : "transparent");
           const sec = styling.secondaryButton;
           const secColor = sec?.color || btnBgColor;
@@ -999,7 +1000,7 @@ function FormsExpertForm({
             justifyContent: "center",
             padding: `${btnPy} ${btnPx}`,
             fontWeight: 500,
-            fontSize: btnSize.fs,
+            fontSize: sec.fontSize != null ? `${sec.fontSize}px` : btnFs,
             fontFamily: "inherit",
             borderRadius: btnRadius,
             cursor: "pointer",
@@ -1022,7 +1023,7 @@ function FormsExpertForm({
                     ...styling.buttonFullWidth ? { width: "100%" } : styling.buttonAlign ? {} : { width: "100%" },
                     padding: `${btnPy} ${btnPx}`,
                     fontWeight: 500,
-                    fontSize: btnSize.fs,
+                    fontSize: btnFs,
                     fontFamily: "inherit",
                     borderRadius: btnRadius,
                     cursor: form.isLoading ? "not-allowed" : "pointer",

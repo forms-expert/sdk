@@ -613,6 +613,8 @@ export function renderForm(
     showFormName?: boolean;
     secondaryButton?: SecondaryButton;
     buttonAlign?: string;
+    formNameFontSize?: number;
+    formNameFontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
   } = {}
 ): HTMLFormElement {
   const form = document.createElement('form');
@@ -630,8 +632,9 @@ export function renderForm(
     const title = document.createElement('h1');
     title.className = 'forms-expert-title';
     title.textContent = options.formName;
-    title.style.fontSize = '1.5rem';
-    title.style.fontWeight = '700';
+    title.style.fontSize = options.formNameFontSize != null ? `${options.formNameFontSize}px` : '1.5rem';
+    const weightMap: Record<string, string> = { normal: '400', medium: '500', semibold: '600', bold: '700' };
+    title.style.fontWeight = weightMap[options.formNameFontWeight || 'bold'] || '700';
     title.style.marginBottom = '0.5rem';
     form.appendChild(title);
   }
@@ -713,6 +716,7 @@ export function renderForm(
     }
     if (sec.marginTop != null) a.style.marginTop = `${sec.marginTop}px`;
     if (sec.marginBottom != null) a.style.marginBottom = `${sec.marginBottom}px`;
+    if (sec.fontSize != null) a.style.fontSize = `${sec.fontSize}px`;
     return a;
   };
 

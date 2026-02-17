@@ -75,6 +75,7 @@ export interface SecondaryButton {
   style?: 'filled' | 'outlined' | 'minimal' | 'link';
   color?: string;
   textColor?: string;
+  fontSize?: number;
 }
 
 /**
@@ -106,12 +107,15 @@ export interface FormStyling {
   buttonPaddingY?: number;
   buttonGradient?: string;
   buttonFullWidth?: boolean;
+  buttonFontSize?: number;
   fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
   formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
   labelSpacing?: 'compact' | 'normal' | 'relaxed';
   placeholderFontSize?: 'small' | 'medium' | 'large';
   headingSize?: 'small' | 'medium' | 'large' | 'extra-large';
   paragraphSize?: 'small' | 'medium' | 'large';
+  formNameFontSize?: number;
+  formNameFontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
   hideRequiredAsterisk?: boolean;
   logoUrl?: string;
   logoPosition?: 'top-left' | 'top-center' | 'top-right';

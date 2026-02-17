@@ -116,6 +116,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   const btnSize = btnSizeMap[s.buttonSize || 'medium'];
   const btnPx = s.buttonPaddingX != null ? `${s.buttonPaddingX}px` : btnSize.px;
   const btnPy = s.buttonPaddingY != null ? `${s.buttonPaddingY}px` : btnSize.py;
+  const btnFs = s.buttonFontSize != null ? `${s.buttonFontSize}px` : btnSize.fs;
   const btnBg = s.buttonGradient || (s.buttonStyle === 'filled' ? btnBgColor : 'transparent');
 
   return `
@@ -278,7 +279,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   ${s.buttonFullWidth ? 'width: 100%;' : (s.buttonAlign ? '' : 'width: 100%;')}
   padding: ${btnPy} ${btnPx};
   font-weight: 500;
-  font-size: ${btnSize.fs};
+  font-size: ${btnFs};
   font-family: inherit;
   border-radius: ${btnRadius};
   cursor: pointer;
