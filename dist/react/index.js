@@ -787,7 +787,7 @@ function FormsExpertForm({
   const formMaxWidth = getFormMaxWidth(styling.formWidth);
   const btnBgColor = styling.primaryColor;
   const btnTextColor = styling.buttonColor;
-  const fontFamily = styling.fontFamily || "system-ui, -apple-system, sans-serif";
+  const fontFamily = styling.fontFamily ? styling.fontFamily.includes(",") ? styling.fontFamily : `${styling.fontFamily}, sans-serif` : "system-ui, -apple-system, sans-serif";
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
   const handleSubmit = async (e) => {

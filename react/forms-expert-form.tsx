@@ -280,7 +280,10 @@ export function FormsExpertForm({
   const formMaxWidth = getFormMaxWidth(styling.formWidth);
   const btnBgColor = styling.primaryColor;
   const btnTextColor = styling.buttonColor;
-  const fontFamily = styling.fontFamily || 'system-ui, -apple-system, sans-serif';
+  // Normalize font family - support legacy single values by adding fallbacks
+  const fontFamily = styling.fontFamily 
+    ? (styling.fontFamily.includes(',') ? styling.fontFamily : `${styling.fontFamily}, sans-serif`)
+    : 'system-ui, -apple-system, sans-serif';
   const btnAlign = getButtonAlign(styling.buttonAlign);
   const resolvedButtonText = styling.buttonText || submitText;
 
