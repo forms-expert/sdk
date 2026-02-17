@@ -86,6 +86,7 @@ interface FormStyling {
     formWidth?: 'narrow' | 'medium' | 'wide' | 'full';
     fieldLayout?: 'stacked' | 'inline';
     fieldBorderStyle?: 'full' | 'bottom';
+    fieldBorderRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     buttonColor?: string;
     buttonText?: string;
     buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';

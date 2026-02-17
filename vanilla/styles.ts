@@ -21,6 +21,17 @@ function getBorderRadius(radius: FormStyling['borderRadius']): string {
   }
 }
 
+function getFieldBorderRadius(radius?: FormStyling['fieldBorderRadius']): string {
+  switch (radius) {
+    case 'none': return '0';
+    case 'small': return '0.25rem';
+    case 'medium': return '0.375rem';
+    case 'large': return '0.75rem';
+    case 'full': return '9999px';
+    default: return '0.375rem';
+  }
+}
+
 function getButtonRadius(radius?: FormStyling['buttonRadius']): string {
   switch (radius) {
     case 'none': return '0';
@@ -96,6 +107,7 @@ function getButtonAlign(align?: FormStyling['buttonAlign']): string {
 export function generateFormStyles(styling: FormStyling = defaultStyling): string {
   const s = { ...defaultStyling, ...styling };
   const radius = getBorderRadius(s.borderRadius);
+  const fieldRadius = getFieldBorderRadius(s.fieldBorderRadius);
   const btnRadius = getButtonRadius(s.buttonRadius);
   const fontSize = getFontSize(s.fontSize);
   const phFontSize = getPlaceholderFontSize(s.placeholderFontSize);
@@ -204,7 +216,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   padding: 0.5rem 0.75rem;
   border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
   ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
-  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : radius};
+  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
   font-family: inherit;
   background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
@@ -260,7 +272,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   padding: 0.5rem 0.75rem;
   border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
   ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
-  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : radius};
+  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
   background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
   cursor: pointer;

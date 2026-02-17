@@ -30,6 +30,17 @@ function getBorderRadius(radius: FormStyling['borderRadius']): string {
   }
 }
 
+function getFieldBorderRadius(radius?: FormStyling['fieldBorderRadius']): string {
+  switch (radius) {
+    case 'none': return '0';
+    case 'small': return '0.25rem';
+    case 'medium': return '0.375rem';
+    case 'large': return '0.75rem';
+    case 'full': return '9999px';
+    default: return '0.375rem';
+  }
+}
+
 function getButtonRadius(radius?: FormStyling['buttonRadius']): string {
   switch (radius) {
     case 'none': return '0';
@@ -291,7 +302,40 @@ export function FormsExpertForm({
   // Google Fonts that need to be loaded
   const googleFonts = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Poppins', 'Montserrat', 'Nunito', 'Source Sans Pro', 'Raleway', 'Ubuntu', 'Playfair Display', 'Merriweather'];
   const fontToLoad = styling.fontFamily?.split(',')[0]?.trim();
-  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad)
+  
+  // Check if page already has custom fonts loaded (don't override existing fonts)
+  const hasExistingFonts = useMemo(() => {
+    if (typeof document === 'undefined') return false;
+    const links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (const link of links) {
+      const href = (link as HTMLLinkElement).href || '';
+      if (href.includes('fonts.googleapis.com') || href.includes('fonts.gstatic.com') || href.includes('typekit') || href.includes('fonts.')) {
+        return true;
+      }
+    }
+    // Also check for @font-face in existing stylesheets
+    try {
+      for (const sheet of document.styleSheets) {
+        try {
+          const rules = sheet.cssRules || sheet.rules;
+          if (rules) {
+            for (const rule of rules) {
+              if (rule instanceof CSSFontFaceRule) {
+                return true;
+              }
+            }
+          }
+        } catch {
+          // Cross-origin stylesheets will throw, ignore
+        }
+      }
+    } catch {
+      // Ignore errors
+    }
+    return false;
+  }, []);
+
+  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad) && !hasExistingFonts
     ? `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, '+')}:wght@400;500;600;700&display=swap`
     : null;
 
@@ -724,6 +768,7 @@ function FormFieldInput({
   phFontSize,
 }: FormFieldInputProps) {
   const radius = getBorderRadius(styling.borderRadius);
+  const fieldRadius = getFieldBorderRadius(styling.fieldBorderRadius);
   const fontSize = getFontSize(styling.fontSize);
   const isInline = styling.labelPosition === 'left' || styling.fieldLayout === 'inline';
 
@@ -733,7 +778,7 @@ function FormFieldInput({
     padding: '0.5rem 0.75rem',
     border: isBottomBorder ? 'none' : `1px solid ${error ? '#ef4444' : styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}`,
     ...(isBottomBorder ? { borderBottom: `1px solid ${error ? '#ef4444' : styling.theme === 'dark' ? '#4b5563' : '#d1d5db'}` } : {}),
-    borderRadius: isBottomBorder ? 0 : radius,
+    borderRadius: isBottomBorder ? 0 : fieldRadius,
     fontSize,
     fontFamily: 'inherit',
     backgroundColor: styling.theme === 'dark' ? '#374151' : '#ffffff',

@@ -577,6 +577,22 @@ function getBorderRadius(radius) {
       return "0.375rem";
   }
 }
+function getFieldBorderRadius(radius) {
+  switch (radius) {
+    case "none":
+      return "0";
+    case "small":
+      return "0.25rem";
+    case "medium":
+      return "0.375rem";
+    case "large":
+      return "0.75rem";
+    case "full":
+      return "9999px";
+    default:
+      return "0.375rem";
+  }
+}
 function getButtonRadius(radius) {
   switch (radius) {
     case "none":
@@ -815,7 +831,34 @@ function FormsExpertForm({
   const resolvedButtonText = styling.buttonText || submitText;
   const googleFonts = ["Inter", "Roboto", "Open Sans", "Lato", "Poppins", "Montserrat", "Nunito", "Source Sans Pro", "Raleway", "Ubuntu", "Playfair Display", "Merriweather"];
   const fontToLoad = styling.fontFamily?.split(",")[0]?.trim();
-  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad) ? `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, "+")}:wght@400;500;600;700&display=swap` : null;
+  const hasExistingFonts = (0, import_react2.useMemo)(() => {
+    if (typeof document === "undefined") return false;
+    const links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (const link of links) {
+      const href = link.href || "";
+      if (href.includes("fonts.googleapis.com") || href.includes("fonts.gstatic.com") || href.includes("typekit") || href.includes("fonts.")) {
+        return true;
+      }
+    }
+    try {
+      for (const sheet of document.styleSheets) {
+        try {
+          const rules = sheet.cssRules || sheet.rules;
+          if (rules) {
+            for (const rule of rules) {
+              if (rule instanceof CSSFontFaceRule) {
+                return true;
+              }
+            }
+          }
+        } catch {
+        }
+      }
+    } catch {
+    }
+    return false;
+  }, []);
+  const googleFontUrl = fontToLoad && googleFonts.includes(fontToLoad) && !hasExistingFonts ? `https://fonts.googleapis.com/css2?family=${fontToLoad.replace(/ /g, "+")}:wght@400;500;600;700&display=swap` : null;
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await form.submit(captchaToken || void 0);
@@ -1173,6 +1216,7 @@ function FormFieldInput({
   phFontSize
 }) {
   const radius = getBorderRadius(styling.borderRadius);
+  const fieldRadius = getFieldBorderRadius(styling.fieldBorderRadius);
   const fontSize = getFontSize(styling.fontSize);
   const isInline = styling.labelPosition === "left" || styling.fieldLayout === "inline";
   const isBottomBorder = styling.fieldBorderStyle === "bottom";
@@ -1181,7 +1225,7 @@ function FormFieldInput({
     padding: "0.5rem 0.75rem",
     border: isBottomBorder ? "none" : `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}`,
     ...isBottomBorder ? { borderBottom: `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } : {},
-    borderRadius: isBottomBorder ? 0 : radius,
+    borderRadius: isBottomBorder ? 0 : fieldRadius,
     fontSize,
     fontFamily: "inherit",
     backgroundColor: styling.theme === "dark" ? "#374151" : "#ffffff",
