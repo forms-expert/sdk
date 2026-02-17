@@ -81,6 +81,9 @@ interface FormStyling {
     fontSize: 'sm' | 'md' | 'lg';
     buttonStyle: 'filled' | 'outline';
     labelPosition: 'top' | 'left' | 'floating';
+    labelClassName?: string;
+    fieldClassName?: string;
+    buttonClassName?: string;
     customCss?: string;
     fontFamily?: string;
     formWidth?: 'narrow' | 'medium' | 'wide' | 'full';

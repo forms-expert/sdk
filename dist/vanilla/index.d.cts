@@ -78,6 +78,9 @@ interface FormStyling {
     fontSize: 'sm' | 'md' | 'lg';
     buttonStyle: 'filled' | 'outline';
     labelPosition: 'top' | 'left' | 'floating';
+    labelClassName?: string;
+    fieldClassName?: string;
+    buttonClassName?: string;
     customCss?: string;
     fontFamily?: string;
     formWidth?: 'narrow' | 'medium' | 'wide' | 'full';
@@ -162,6 +165,7 @@ declare function renderForm(schema: FormSchema, values?: Record<string, unknown>
     showFormName?: boolean;
     secondaryButton?: SecondaryButton;
     buttonAlign?: string;
+    buttonClassName?: string;
     formNameFontSize?: number;
     formNameFontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
 }): HTMLFormElement;

@@ -183,7 +183,7 @@ var FormsApiClient = class {
    */
   async trackView(slug) {
     const url = this.buildUrl(`/f/${this.resourceId}/${slug}/view`);
-    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" } }).catch(() => {
+    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => {
     });
   }
   /**
@@ -1018,7 +1018,7 @@ function FormsExpertForm({
             }
           }
         ),
-        form.config.settings?.showFormName !== false && form.config.name && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { style: {
+        form.config.settings?.showFormName !== false && form.config.name && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
           fontSize: styling.formNameFontSize != null ? `${styling.formNameFontSize}px` : "1.5rem",
           fontWeight: styling.formNameFontWeight === "normal" ? 400 : styling.formNameFontWeight === "medium" ? 500 : styling.formNameFontWeight === "semibold" ? 600 : 700,
           marginBottom: "0.5rem",
@@ -1086,6 +1086,7 @@ function FormsExpertForm({
                 {
                   type: "submit",
                   disabled: form.isLoading,
+                  className: styling.buttonClassName,
                   style: {
                     ...styling.buttonFullWidth ? { width: "100%" } : styling.buttonAlign ? {} : { width: "100%" },
                     padding: `${btnPy} ${btnPx}`,
@@ -1229,7 +1230,7 @@ function FormFieldInput({
           style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor }
         }
       ),
-      (field.label || field.type === "consent" && field.consentText) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, children: [
+      (field.label || field.type === "consent" && field.consentText) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, className: styling.labelClassName, children: [
         field.type === "consent" && field.consentText ? field.consentUrl ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { children: [
           field.consentText,
           " ",
@@ -1244,6 +1245,7 @@ function FormFieldInput({
     "label",
     {
       htmlFor: field.name,
+      className: styling.labelClassName,
       style: {
         display: "block",
         fontWeight: 500,
@@ -1267,11 +1269,12 @@ function FormFieldInput({
         onChange,
         placeholder: field.placeholder,
         required: field.required,
-        style: { ...inputStyle, minHeight: "100px", resize: "vertical" }
+        style: { ...inputStyle, minHeight: "100px", resize: "vertical" },
+        className: styling.fieldClassName
       }
     );
   } else if (field.type === "select" || field.type === "dropdown") {
-    fieldEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("select", { id: field.name, name: field.name, value: String(value || ""), onChange, required: field.required, style: inputStyle, children: [
+    fieldEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("select", { id: field.name, name: field.name, value: String(value || ""), onChange, required: field.required, style: inputStyle, className: styling.fieldClassName, children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: "", children: "Select an option..." }),
       getOpts().map((opt) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: opt.value, children: opt.label }, opt.value))
     ] });
@@ -1415,7 +1418,8 @@ function FormFieldInput({
         required: field.required,
         accept: field.allowedMimeTypes?.join(","),
         multiple: field.multiple,
-        style: inputStyle
+        style: inputStyle,
+        className: styling.fieldClassName
       }
     );
   } else if (field.type === "name") {
@@ -1428,7 +1432,8 @@ function FormFieldInput({
         placeholder: labels[nf] || nf,
         value: nameVal[nf] || "",
         onChange: (e) => onValueChange(field.name, { ...nameVal, [nf]: e.target.value }),
-        style: { ...inputStyle, flex: 1, minWidth: "120px" }
+        style: { ...inputStyle, flex: 1, minWidth: "120px" },
+        className: styling.fieldClassName
       },
       nf
     )) });
@@ -1442,7 +1447,8 @@ function FormFieldInput({
         placeholder: labels[af] || af,
         value: addr[af] || "",
         onChange: (e) => onValueChange(field.name, { ...addr, [af]: e.target.value }),
-        style: inputStyle
+        style: inputStyle,
+        className: styling.fieldClassName
       },
       af
     )) });
@@ -1461,7 +1467,8 @@ function FormFieldInput({
           min: field.min,
           max: field.max,
           required: field.required,
-          style: inputStyle
+          style: inputStyle,
+          className: styling.fieldClassName
         }
       )
     ] });
@@ -1484,16 +1491,17 @@ function FormFieldInput({
           value: String(value || ""),
           onChange: (e) => onValueChange(field.name, e.target.value),
           placeholder: "#000000",
-          style: { ...inputStyle, flex: 1 }
+          style: { ...inputStyle, flex: 1 },
+          className: styling.fieldClassName
         }
       )
     ] });
   } else if (field.type === "dateRange") {
     const range = value || {};
     fieldEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: "0.5rem", alignItems: "center" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "date", value: range.start || "", onChange: (e) => onValueChange(field.name, { ...range, start: e.target.value }), style: { ...inputStyle, flex: 1 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "date", value: range.start || "", onChange: (e) => onValueChange(field.name, { ...range, start: e.target.value }), style: { ...inputStyle, flex: 1 }, className: styling.fieldClassName }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "to" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "date", value: range.end || "", onChange: (e) => onValueChange(field.name, { ...range, end: e.target.value }), style: { ...inputStyle, flex: 1 } })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "date", value: range.end || "", onChange: (e) => onValueChange(field.name, { ...range, end: e.target.value }), style: { ...inputStyle, flex: 1 }, className: styling.fieldClassName })
     ] });
   } else {
     const typeMap = {
@@ -1520,7 +1528,8 @@ function FormFieldInput({
         max: field.max,
         step: field.step,
         maxLength: field.maxLength,
-        style: inputStyle
+        style: inputStyle,
+        className: styling.fieldClassName
       }
     );
   }

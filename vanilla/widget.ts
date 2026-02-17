@@ -154,6 +154,7 @@ export class FormWidget {
       showFormName: this.config.settings?.showFormName as boolean | undefined,
       secondaryButton: mergedStyling.secondaryButton,
       buttonAlign: mergedStyling.buttonAlign,
+      buttonClassName: mergedStyling.buttonClassName,
       formNameFontSize: mergedStyling.formNameFontSize,
       formNameFontWeight: mergedStyling.formNameFontWeight,
     });

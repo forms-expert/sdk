@@ -151,7 +151,7 @@ var FormsApiClient = class {
    */
   async trackView(slug) {
     const url = this.buildUrl(`/f/${this.resourceId}/${slug}/view`);
-    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" } }).catch(() => {
+    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => {
     });
   }
   /**

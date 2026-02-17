@@ -38,6 +38,13 @@ function getParagraphSizePx(size?: string): string {
 }
 
 /**
+ * Helper to add custom class names to elements
+ */
+function addCustomClass(baseClass: string, customClass?: string): string {
+  return customClass ? `${baseClass} ${customClass}` : baseClass;
+}
+
+/**
  * Create a form field element
  */
 export function renderField(
@@ -149,7 +156,7 @@ export function renderField(
   // Label
   if (field.label) {
     const label = document.createElement('label');
-    label.className = 'forms-expert-label';
+    label.className = `forms-expert-label${styling?.labelClassName ? ' ' + styling.labelClassName : ''}`;
     label.htmlFor = `mira-field-${field.name}`;
     label.innerHTML = `${escapeHtml(field.label)}${field.required ? '<span class="forms-expert-required">*</span>' : ''}`;
     group.appendChild(label);
@@ -165,7 +172,7 @@ export function renderField(
     case 'textarea':
     case 'richText':
       input = document.createElement('textarea');
-      input.className = 'forms-expert-textarea';
+      input.className = addCustomClass('forms-expert-textarea', styling?.fieldClassName);
       input.value = String(value || '');
       if (field.maxLength) input.maxLength = field.maxLength;
       break;
@@ -173,7 +180,7 @@ export function renderField(
     case 'select':
     case 'dropdown': {
       input = document.createElement('select');
-      input.className = 'forms-expert-select';
+      input.className = addCustomClass('forms-expert-select', styling?.fieldClassName);
       
       const defaultOption = document.createElement('option');
       defaultOption.value = '';
@@ -329,7 +336,7 @@ export function renderField(
     case 'currency': {
       input = document.createElement('input');
       input.type = 'number';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value ?? '');
       if (field.min !== undefined) input.min = String(field.min);
       if (field.max !== undefined) input.max = String(field.max);
@@ -340,35 +347,35 @@ export function renderField(
     case 'phone':
       input = document.createElement('input');
       input.type = 'tel';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       break;
 
     case 'url':
       input = document.createElement('input');
       input.type = 'url';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       break;
 
     case 'password':
       input = document.createElement('input');
       input.type = 'password';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       break;
 
     case 'time':
       input = document.createElement('input');
       input.type = 'time';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       break;
 
     case 'datetime':
       input = document.createElement('input');
       input.type = 'datetime-local';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       break;
 
@@ -386,12 +393,12 @@ export function renderField(
       const range = (value as { start?: string; end?: string }) || {};
       const startInput = document.createElement('input');
       startInput.type = 'date';
-      startInput.className = 'forms-expert-input';
+      startInput.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       startInput.name = `${field.name}.start`;
       startInput.value = range.start || '';
       const endInput = document.createElement('input');
       endInput.type = 'date';
-      endInput.className = 'forms-expert-input';
+      endInput.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       endInput.name = `${field.name}.end`;
       endInput.value = range.end || '';
       rangeContainer.appendChild(startInput);
@@ -416,7 +423,7 @@ export function renderField(
       addrFields.forEach((af) => {
         const inp = document.createElement('input');
         inp.type = 'text';
-        inp.className = 'forms-expert-input';
+        inp.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
         inp.name = `${field.name}.${af}`;
         inp.placeholder = labels[af] || af;
         inp.value = addr[af] || '';
@@ -442,7 +449,7 @@ export function renderField(
       nameFields.forEach((nf) => {
         const inp = document.createElement('input');
         inp.type = 'text';
-        inp.className = 'forms-expert-input';
+        inp.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
         inp.name = `${field.name}.${nf}`;
         inp.placeholder = labels[nf] || nf;
         inp.value = nameVal[nf] || '';
@@ -520,7 +527,7 @@ export function renderField(
       const loc = (value as { lat?: number; lng?: number; address?: string }) || {};
       const addrInput = document.createElement('input');
       addrInput.type = 'text';
-      addrInput.className = 'forms-expert-input';
+      addrInput.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       addrInput.name = `${field.name}.address`;
       addrInput.placeholder = 'Address';
       addrInput.value = loc.address || '';
@@ -529,14 +536,14 @@ export function renderField(
       coordRow.className = 'forms-expert-location-coords';
       const latInput = document.createElement('input');
       latInput.type = 'number';
-      latInput.className = 'forms-expert-input';
+      latInput.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       latInput.name = `${field.name}.lat`;
       latInput.placeholder = 'Latitude';
       latInput.step = 'any';
       latInput.value = loc.lat !== undefined ? String(loc.lat) : '';
       const lngInput = document.createElement('input');
       lngInput.type = 'number';
-      lngInput.className = 'forms-expert-input';
+      lngInput.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       lngInput.name = `${field.name}.lng`;
       lngInput.placeholder = 'Longitude';
       lngInput.step = 'any';
@@ -558,7 +565,7 @@ export function renderField(
     default:
       input = document.createElement('input');
       input.type = field.type === 'email' ? 'email' : field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text';
-      input.className = 'forms-expert-input';
+      input.className = addCustomClass('forms-expert-input', styling?.fieldClassName);
       input.value = String(value || '');
       if (field.type === 'number') {
         if (field.min !== undefined) input.min = String(field.min);
@@ -613,6 +620,7 @@ export function renderForm(
     showFormName?: boolean;
     secondaryButton?: SecondaryButton;
     buttonAlign?: string;
+    buttonClassName?: string;
     formNameFontSize?: number;
     formNameFontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
   } = {}
@@ -671,7 +679,7 @@ export function renderForm(
   // Submit button
   const button = document.createElement('button');
   button.type = 'submit';
-  button.className = 'forms-expert-button';
+  button.className = addCustomClass('forms-expert-button', options.buttonClassName);
   button.disabled = options.isLoading || false;
   
   if (options.isLoading) {

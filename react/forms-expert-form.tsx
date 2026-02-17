@@ -516,14 +516,14 @@ export function FormsExpertForm({
 
       {/* Form name */}
       {(form.config.settings?.showFormName !== false) && form.config.name && (
-        <h1 style={{
+        <div style={{
           fontSize: styling.formNameFontSize != null ? `${styling.formNameFontSize}px` : '1.5rem',
           fontWeight: styling.formNameFontWeight === 'normal' ? 400 : styling.formNameFontWeight === 'medium' ? 500 : styling.formNameFontWeight === 'semibold' ? 600 : 700,
           marginBottom: '0.5rem',
           color: styling.textColor,
         }}>
           {form.config.hostedConfig?.pageTitle || form.config.name}
-        </h1>
+        </div>
       )}
 
       {fields.map((field) => (
@@ -603,6 +603,7 @@ export function FormsExpertForm({
               <button
                 type="submit"
                 disabled={form.isLoading}
+                className={styling.buttonClassName}
                 style={{
                   ...(styling.buttonFullWidth ? { width: '100%' } : (styling.buttonAlign ? {} : { width: '100%' })),
                   padding: `${btnPy} ${btnPx}`,
@@ -792,7 +793,7 @@ function FormFieldInput({
           style={{ width: '1rem', height: '1rem', accentColor: styling.primaryColor }}
         />
         {(field.label || (field.type === 'consent' && field.consentText)) && (
-          <label htmlFor={field.name}>
+          <label htmlFor={field.name} className={styling.labelClassName}>
             {field.type === 'consent' && field.consentText
               ? (field.consentUrl
                 ? <span>{field.consentText} <a href={field.consentUrl} target="_blank" rel="noopener noreferrer" style={{ color: styling.primaryColor }}>(link)</a></span>
@@ -809,6 +810,7 @@ function FormFieldInput({
   const labelEl = field.label ? (
     <label
       htmlFor={field.name}
+      className={styling.labelClassName}
       style={{
         display: 'block',
         fontWeight: 500,
@@ -838,11 +840,12 @@ function FormFieldInput({
         placeholder={field.placeholder}
         required={field.required}
         style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }}
+        className={styling.fieldClassName}
       />
     );
   } else if (field.type === 'select' || field.type === 'dropdown') {
     fieldEl = (
-      <select id={field.name} name={field.name} value={String(value || '')} onChange={onChange} required={field.required} style={inputStyle}>
+      <select id={field.name} name={field.name} value={String(value || '')} onChange={onChange} required={field.required} style={inputStyle} className={styling.fieldClassName}>
         <option value="">Select an option...</option>
         {getOpts().map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
       </select>
@@ -989,6 +992,7 @@ function FormFieldInput({
         accept={field.allowedMimeTypes?.join(',')}
         multiple={field.multiple}
         style={inputStyle}
+        className={styling.fieldClassName}
       />
     );
   } else if (field.type === 'name') {
@@ -1004,6 +1008,7 @@ function FormFieldInput({
             value={nameVal[nf] || ''}
             onChange={(e) => onValueChange(field.name, { ...nameVal, [nf]: e.target.value })}
             style={{ ...inputStyle, flex: 1, minWidth: '120px' }}
+            className={styling.fieldClassName}
           />
         ))}
       </div>
@@ -1021,6 +1026,7 @@ function FormFieldInput({
             value={addr[af] || ''}
             onChange={(e) => onValueChange(field.name, { ...addr, [af]: e.target.value })}
             style={inputStyle}
+            className={styling.fieldClassName}
           />
         ))}
       </div>
@@ -1040,6 +1046,7 @@ function FormFieldInput({
           max={field.max}
           required={field.required}
           style={inputStyle}
+          className={styling.fieldClassName}
         />
       </div>
     );
@@ -1059,6 +1066,7 @@ function FormFieldInput({
           onChange={(e) => onValueChange(field.name, e.target.value)}
           placeholder="#000000"
           style={{ ...inputStyle, flex: 1 }}
+          className={styling.fieldClassName}
         />
       </div>
     );
@@ -1066,9 +1074,9 @@ function FormFieldInput({
     const range = (value || {}) as { start?: string; end?: string };
     fieldEl = (
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-        <input type="date" value={range.start || ''} onChange={(e) => onValueChange(field.name, { ...range, start: e.target.value })} style={{ ...inputStyle, flex: 1 }} />
+        <input type="date" value={range.start || ''} onChange={(e) => onValueChange(field.name, { ...range, start: e.target.value })} style={{ ...inputStyle, flex: 1 }} className={styling.fieldClassName} />
         <span>to</span>
-        <input type="date" value={range.end || ''} onChange={(e) => onValueChange(field.name, { ...range, end: e.target.value })} style={{ ...inputStyle, flex: 1 }} />
+        <input type="date" value={range.end || ''} onChange={(e) => onValueChange(field.name, { ...range, end: e.target.value })} style={{ ...inputStyle, flex: 1 }} className={styling.fieldClassName} />
       </div>
     );
   } else {
@@ -1091,6 +1099,7 @@ function FormFieldInput({
         step={field.step}
         maxLength={field.maxLength}
         style={inputStyle}
+        className={styling.fieldClassName}
       />
     );
   }
