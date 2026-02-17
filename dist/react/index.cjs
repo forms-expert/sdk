@@ -961,7 +961,13 @@ function FormsExpertForm({
         ...style
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { dangerouslySetInnerHTML: { __html: `form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }` } }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { dangerouslySetInnerHTML: { __html: `
+        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }
+        form[data-fe-scope="${formScopeId}"] button[type="submit"]:hover:not(:disabled) { filter: brightness(0.9); }
+        form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
+        form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
+        form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+      ` } }),
         styling.logoUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
           textAlign: styling.logoPosition === "top-left" ? "left" : styling.logoPosition === "top-right" ? "right" : "center",
           marginBottom: "1rem"
@@ -1031,7 +1037,14 @@ function FormsExpertForm({
             color: sec.textColor || (sec.style === "filled" ? "#ffffff" : secColor),
             border: sec.style === "outlined" ? `2px solid ${secColor}` : "none",
             marginTop: sec.marginTop != null ? `${sec.marginTop}px` : void 0,
-            marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
+            marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0,
+            maxWidth: "100%",
+            boxSizing: "border-box",
+            flexShrink: 1,
+            minWidth: 0,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis"
           } : void 0;
           return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
@@ -1052,7 +1065,14 @@ function FormsExpertForm({
                     opacity: form.isLoading ? 0.5 : 1,
                     background: btnBg,
                     color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
-                    border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`
+                    border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`,
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
+                    flexShrink: 1,
+                    minWidth: 0,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
                   },
                   children: form.isLoading ? "Submitting..." : resolvedButtonText
                 }

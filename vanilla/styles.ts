@@ -284,6 +284,13 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   border-radius: ${btnRadius};
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   ${s.buttonStyle === 'filled' 
     ? `background: ${btnBg}; color: ${btnTextColor || 'white'}; border: none;`
     : `background: transparent; color: ${btnBgColor}; border: 2px solid ${btnBgColor};`
@@ -291,11 +298,12 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 }
 
 .forms-expert-button:hover {
-  opacity: 0.9;
+  filter: brightness(0.9);
 }
 
 .forms-expert-button:active {
   transform: scale(0.98);
+  filter: brightness(0.85);
 }
 
 .forms-expert-button:disabled {
@@ -378,8 +386,16 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   cursor: pointer;
   transition: opacity 0.2s;
   text-decoration: none;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.forms-expert-secondary-btn:hover { opacity: 0.9; }
+.forms-expert-secondary-btn:hover { filter: brightness(0.9); }
+.forms-expert-secondary-btn:active { filter: brightness(0.85); }
 
 .forms-expert-secondary-below {
   display: flex;
@@ -428,6 +444,16 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 }
 .forms-expert-image-choice-item.active { border-color: ${s.primaryColor}; }
 .forms-expert-image-choice-item img { max-width: 80px; max-height: 80px; object-fit: cover; border-radius: ${radius}; }
+
+/* Responsive button scaling */
+@media (max-width: 480px) {
+  .forms-expert-button,
+  .forms-expert-secondary-btn {
+    padding-left: max(0.5rem, min(${btnPx}, 3vw));
+    padding-right: max(0.5rem, min(${btnPx}, 3vw));
+    font-size: max(0.75rem, min(${btnFs}, 3.5vw));
+  }
+}
 
 ${s.customCss || ''}
 `.trim();

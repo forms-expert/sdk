@@ -438,7 +438,13 @@ export function FormsExpertForm({
       }}
     >
       {/* Scoped placeholder styles */}
-      <style dangerouslySetInnerHTML={{ __html: `form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: `
+        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }
+        form[data-fe-scope="${formScopeId}"] button[type="submit"]:hover:not(:disabled) { filter: brightness(0.9); }
+        form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
+        form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
+        form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+      ` }} />
       {/* Logo */}
       {styling.logoUrl && (
         <div style={{
@@ -533,6 +539,13 @@ export function FormsExpertForm({
           border: sec.style === 'outlined' ? `2px solid ${secColor}` : 'none',
           marginTop: sec.marginTop != null ? `${sec.marginTop}px` : undefined,
           marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : undefined,
+          maxWidth: '100%',
+          boxSizing: 'border-box' as const,
+          flexShrink: 1,
+          minWidth: 0,
+          whiteSpace: 'nowrap' as const,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         } : undefined;
 
         return (
@@ -564,6 +577,13 @@ export function FormsExpertForm({
                     styling.buttonStyle === 'filled'
                       ? 'none'
                       : `2px solid ${btnBgColor}`,
+                  maxWidth: '100%',
+                  boxSizing: 'border-box',
+                  flexShrink: 1,
+                  minWidth: 0,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
                 {form.isLoading ? 'Submitting...' : resolvedButtonText}
