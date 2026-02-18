@@ -1284,6 +1284,7 @@ function FormFieldInput({
   const isBottomBorder = styling.fieldBorderStyle === "bottom";
   const fieldPadding = styling.fieldPaddingX != null || styling.fieldPaddingY != null ? `${styling.fieldPaddingY ?? 8}px ${styling.fieldPaddingX ?? 12}px` : "0.5rem 0.75rem";
   const defaultBorderColor = error ? "#ef4444" : styling.fieldBorderColor || (styling.theme === "dark" ? "#4b5563" : "#d1d5db");
+  const [selectOpen, setSelectOpen] = useState2(false);
   const inputStyle = {
     width: "100%",
     padding: fieldPadding,
@@ -1382,12 +1383,77 @@ function FormFieldInput({
       }
     );
   } else if (field.type === "select" || field.type === "dropdown") {
-    fieldEl = /* @__PURE__ */ jsxs("select", { id: field.name, name: field.name, value: String(value || ""), onChange, required: field.required, style: inputStyle, className: styling.fieldClassName, children: [
-      /* @__PURE__ */ jsx2("option", { value: "", children: "Select an option..." }),
-      getOpts().map((opt) => /* @__PURE__ */ jsx2("option", { value: opt.value, children: opt.label }, opt.value))
+    const opts = getOpts();
+    const selectedLabel = opts.find((o) => o.value === String(value || ""))?.label;
+    fieldEl = /* @__PURE__ */ jsxs("div", { style: { position: "relative", width: "100%" }, className: styling.fieldClassName, children: [
+      /* @__PURE__ */ jsxs(
+        "button",
+        {
+          type: "button",
+          id: field.name,
+          onClick: () => setSelectOpen((v) => !v),
+          onBlur: () => setTimeout(() => setSelectOpen(false), 150),
+          style: {
+            ...inputStyle,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            textAlign: "left"
+          },
+          children: [
+            /* @__PURE__ */ jsx2("span", { style: !selectedLabel ? { color: styling.placeholderColor || (styling.theme === "dark" ? "#9ca3af" : "#9ca3af") } : void 0, children: selectedLabel || field.placeholder || "Select an option..." }),
+            /* @__PURE__ */ jsx2("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", style: { flexShrink: 0, opacity: 0.5 }, children: /* @__PURE__ */ jsx2("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
+          ]
+        }
+      ),
+      selectOpen && /* @__PURE__ */ jsx2("div", { style: {
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        marginTop: "4px",
+        backgroundColor: inputStyle.backgroundColor,
+        border: inputStyle.border,
+        borderRadius: inputStyle.borderRadius,
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+        maxHeight: "200px",
+        overflowY: "auto"
+      }, children: opts.map((opt) => /* @__PURE__ */ jsx2(
+        "div",
+        {
+          onMouseDown: (e) => {
+            e.preventDefault();
+            onValueChange(field.name, opt.value);
+            setSelectOpen(false);
+          },
+          style: {
+            padding: inputStyle.padding,
+            cursor: "pointer",
+            backgroundColor: String(value || "") === opt.value ? styling.primaryColor + "20" : "transparent",
+            fontSize: inputStyle.fontSize
+          },
+          onMouseEnter: (e) => {
+            e.currentTarget.style.backgroundColor = styling.primaryColor + "15";
+          },
+          onMouseLeave: (e) => {
+            e.currentTarget.style.backgroundColor = String(value || "") === opt.value ? styling.primaryColor + "20" : "transparent";
+          },
+          children: opt.label
+        },
+        opt.value
+      )) }),
+      /* @__PURE__ */ jsx2("input", { type: "hidden", name: field.name, value: String(value || ""), required: field.required })
     ] });
   } else if (field.type === "radio") {
-    fieldEl = /* @__PURE__ */ jsx2("div", { style: { display: "flex", flexDirection: "column", gap: "0.5rem" }, children: getOpts().map((opt) => /* @__PURE__ */ jsxs("label", { style: { display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }, children: [
+    fieldEl = /* @__PURE__ */ jsx2("div", { style: {
+      ...inputStyle,
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.5rem",
+      width: "100%"
+    }, children: getOpts().map((opt) => /* @__PURE__ */ jsxs("label", { style: { display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }, children: [
       /* @__PURE__ */ jsx2(
         "input",
         {
@@ -1396,14 +1462,20 @@ function FormFieldInput({
           value: opt.value,
           checked: value === opt.value,
           onChange: () => onValueChange(field.name, opt.value),
-          style: { accentColor: styling.primaryColor }
+          style: { accentColor: styling.primaryColor, backgroundColor: "transparent" }
         }
       ),
       opt.label
     ] }, opt.value)) });
   } else if (field.type === "multiselect") {
     const selected = Array.isArray(value) ? value : [];
-    fieldEl = /* @__PURE__ */ jsx2("div", { style: { display: "flex", flexDirection: "column", gap: "0.5rem" }, children: getOpts().map((opt) => /* @__PURE__ */ jsxs("label", { style: { display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }, children: [
+    fieldEl = /* @__PURE__ */ jsx2("div", { style: {
+      ...inputStyle,
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.5rem",
+      width: "100%"
+    }, children: getOpts().map((opt) => /* @__PURE__ */ jsxs("label", { style: { display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }, children: [
       /* @__PURE__ */ jsx2(
         "input",
         {
@@ -1413,7 +1485,7 @@ function FormFieldInput({
             const next = selected.includes(opt.value) ? selected.filter((v) => v !== opt.value) : [...selected, opt.value];
             onValueChange(field.name, next);
           },
-          style: { accentColor: styling.primaryColor }
+          style: { accentColor: styling.primaryColor, backgroundColor: "transparent" }
         }
       ),
       opt.label

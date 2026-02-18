@@ -246,6 +246,36 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   border-color: #ef4444;
 }
 
+.forms-expert-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  margin-top: 4px;
+  background-color: ${s.inputBackgroundColor || (s.theme === 'dark' ? '#374151' : '#ffffff')};
+  border: 1px solid ${borderColor};
+  border-radius: ${fieldRadius};
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.forms-expert-select-option {
+  padding: ${s.fieldPaddingX != null || s.fieldPaddingY != null ? `${s.fieldPaddingY ?? 8}px ${s.fieldPaddingX ?? 12}px` : '0.5rem 0.75rem'};
+  cursor: pointer;
+  font-size: ${fontSize};
+  transition: background-color 0.1s;
+}
+
+.forms-expert-select-option:hover {
+  background-color: ${s.primaryColor}15;
+}
+
+.forms-expert-select-option.active {
+  background-color: ${s.primaryColor}20;
+}
+
 .forms-expert-textarea {
   min-height: 100px;
   resize: vertical;
@@ -473,7 +503,18 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 
 /* Radio & multiselect groups */
 .forms-expert-radio-group,
-.forms-expert-multiselect-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.forms-expert-multiselect-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: ${s.fieldPaddingX != null || s.fieldPaddingY != null ? `${s.fieldPaddingY ?? 8}px ${s.fieldPaddingX ?? 12}px` : '0.5rem 0.75rem'};
+  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${borderColor}`};
+  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${borderColor};` : ''}
+  border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
+  background-color: ${s.inputBackgroundColor || (s.theme === 'dark' ? '#374151' : '#ffffff')};
+  box-sizing: border-box;
+}
 .forms-expert-radio-item,
 .forms-expert-multiselect-item { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
 .forms-expert-radio-item input,

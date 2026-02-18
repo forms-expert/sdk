@@ -858,6 +858,8 @@ function FormFieldInput({
 
   const defaultBorderColor = error ? '#ef4444' : styling.fieldBorderColor || (styling.theme === 'dark' ? '#4b5563' : '#d1d5db');
 
+  const [selectOpen, setSelectOpen] = useState(false);
+
   const inputStyle: CSSProperties = {
     width: '100%',
     padding: fieldPadding,
@@ -978,15 +980,77 @@ function FormFieldInput({
       />
     );
   } else if (field.type === 'select' || field.type === 'dropdown') {
+    const opts = getOpts();
+    const selectedLabel = opts.find((o) => o.value === String(value || ''))?.label;
     fieldEl = (
-      <select id={field.name} name={field.name} value={String(value || '')} onChange={onChange} required={field.required} style={inputStyle} className={styling.fieldClassName}>
-        <option value="">Select an option...</option>
-        {getOpts().map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-      </select>
+      <div style={{ position: 'relative', width: '100%' }} className={styling.fieldClassName}>
+        <button
+          type="button"
+          id={field.name}
+          onClick={() => setSelectOpen((v) => !v)}
+          onBlur={() => setTimeout(() => setSelectOpen(false), 150)}
+          style={{
+            ...inputStyle,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+        >
+          <span style={!selectedLabel ? { color: styling.placeholderColor || (styling.theme === 'dark' ? '#9ca3af' : '#9ca3af') } : undefined}>
+            {selectedLabel || field.placeholder || 'Select an option...'}
+          </span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0, opacity: 0.5 }}>
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        {selectOpen && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            zIndex: 50,
+            marginTop: '4px',
+            backgroundColor: inputStyle.backgroundColor,
+            border: inputStyle.border,
+            borderRadius: inputStyle.borderRadius,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            maxHeight: '200px',
+            overflowY: 'auto',
+          }}>
+            {opts.map((opt) => (
+              <div
+                key={opt.value}
+                onMouseDown={(e) => { e.preventDefault(); onValueChange(field.name, opt.value); setSelectOpen(false); }}
+                style={{
+                  padding: inputStyle.padding,
+                  cursor: 'pointer',
+                  backgroundColor: String(value || '') === opt.value ? (styling.primaryColor + '20') : 'transparent',
+                  fontSize: inputStyle.fontSize,
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = styling.primaryColor + '15'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = String(value || '') === opt.value ? (styling.primaryColor + '20') : 'transparent'; }}
+              >
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        )}
+        {/* Hidden input for form submission / required validation */}
+        <input type="hidden" name={field.name} value={String(value || '')} required={field.required} />
+      </div>
     );
   } else if (field.type === 'radio') {
     fieldEl = (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div style={{
+        ...inputStyle,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+        width: '100%',
+      }}>
         {getOpts().map((opt) => (
           <label key={opt.value} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
             <input
@@ -995,7 +1059,7 @@ function FormFieldInput({
               value={opt.value}
               checked={(value as string) === opt.value}
               onChange={() => onValueChange(field.name, opt.value)}
-              style={{ accentColor: styling.primaryColor }}
+              style={{ accentColor: styling.primaryColor, backgroundColor: 'transparent' }}
             />
             {opt.label}
           </label>
@@ -1005,7 +1069,13 @@ function FormFieldInput({
   } else if (field.type === 'multiselect') {
     const selected = Array.isArray(value) ? (value as string[]) : [];
     fieldEl = (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div style={{
+        ...inputStyle,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+        width: '100%',
+      }}>
         {getOpts().map((opt) => (
           <label key={opt.value} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
             <input
@@ -1017,7 +1087,7 @@ function FormFieldInput({
                   : [...selected, opt.value];
                 onValueChange(field.name, next);
               }}
-              style={{ accentColor: styling.primaryColor }}
+              style={{ accentColor: styling.primaryColor, backgroundColor: 'transparent' }}
             />
             {opt.label}
           </label>

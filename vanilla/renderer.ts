@@ -44,6 +44,10 @@ function addCustomClass(baseClass: string, customClass?: string): string {
   return customClass ? `${baseClass} ${customClass}` : baseClass;
 }
 
+function normalizeOpts(options: unknown[]): { value: string; label: string }[] {
+  return options.map((o) => typeof o === 'string' ? { value: o, label: o } : o as { value: string; label: string });
+}
+
 function getWidthPercent(width?: string): string | undefined {
   switch (width) {
     case '1/4': return '25%';
@@ -198,23 +202,83 @@ export function renderField(
       
     case 'select':
     case 'dropdown': {
-      input = document.createElement('select');
-      input.className = addCustomClass('forms-expert-select', styling?.fieldClassName);
-      
-      const defaultOption = document.createElement('option');
-      defaultOption.value = '';
-      defaultOption.textContent = field.placeholder || 'Select an option...';
-      input.appendChild(defaultOption);
-      
-      const opts = (field.options || []) as string[];
+      const selectWrapper = document.createElement('div');
+      selectWrapper.style.position = 'relative';
+      selectWrapper.style.width = '100%';
+      if (styling?.fieldClassName) selectWrapper.className = styling.fieldClassName;
+
+      const selectBtn = document.createElement('button');
+      selectBtn.type = 'button';
+      selectBtn.className = 'forms-expert-select';
+      selectBtn.style.display = 'flex';
+      selectBtn.style.alignItems = 'center';
+      selectBtn.style.justifyContent = 'space-between';
+      selectBtn.style.cursor = 'pointer';
+      selectBtn.style.textAlign = 'left';
+      selectBtn.style.width = '100%';
+
+      const opts = normalizeOpts(field.options || []);
+      const selectedOpt = opts.find((o) => o.value === String(value || ''));
+
+      const labelSpan = document.createElement('span');
+      labelSpan.textContent = selectedOpt?.label || field.placeholder || 'Select an option...';
+      if (!selectedOpt && styling?.placeholderColor) labelSpan.style.color = styling.placeholderColor;
+      selectBtn.appendChild(labelSpan);
+
+      const arrow = document.createElement('span');
+      arrow.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      arrow.style.flexShrink = '0';
+      arrow.style.opacity = '0.5';
+      selectBtn.appendChild(arrow);
+
+      const dropdown = document.createElement('div');
+      dropdown.className = 'forms-expert-select-dropdown';
+      dropdown.style.display = 'none';
+
       opts.forEach((opt) => {
-        const option = document.createElement('option');
-        option.value = opt;
-        option.textContent = opt;
-        if (value === opt) option.selected = true;
-        input.appendChild(option);
+        const item = document.createElement('div');
+        item.className = 'forms-expert-select-option';
+        item.textContent = opt.label;
+        if (String(value || '') === opt.value) item.classList.add('active');
+        item.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          hiddenInput.value = opt.value;
+          labelSpan.textContent = opt.label;
+          if (styling?.placeholderColor) labelSpan.style.color = '';
+          dropdown.querySelectorAll('.forms-expert-select-option').forEach((el) => el.classList.remove('active'));
+          item.classList.add('active');
+          dropdown.style.display = 'none';
+          hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        dropdown.appendChild(item);
       });
-      break;
+
+      selectBtn.addEventListener('click', () => {
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+      });
+      selectBtn.addEventListener('blur', () => {
+        setTimeout(() => { dropdown.style.display = 'none'; }, 150);
+      });
+
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = field.name;
+      hiddenInput.value = String(value || '');
+      if (field.required) hiddenInput.required = true;
+
+      selectWrapper.appendChild(selectBtn);
+      selectWrapper.appendChild(dropdown);
+      selectWrapper.appendChild(hiddenInput);
+
+      wrapper.appendChild(selectWrapper);
+      if (error) {
+        const errorEl = document.createElement('div');
+        errorEl.className = 'forms-expert-error-message';
+        errorEl.textContent = error;
+        wrapper.appendChild(errorEl);
+      }
+      group.appendChild(wrapper);
+      return group;
     }
 
     case 'radio': {
