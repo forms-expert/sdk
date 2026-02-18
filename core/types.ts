@@ -125,7 +125,7 @@ export interface FormStyling {
   buttonFontSize?: number;
   buttonIcon?: string;
   buttonIconPosition?: 'left' | 'right';
-  fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
+  fieldSpacing?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
   formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
   labelSpacing?: 'compact' | 'normal' | 'relaxed';
   placeholderFontSize?: 'small' | 'medium' | 'large';

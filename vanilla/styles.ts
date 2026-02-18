@@ -62,6 +62,7 @@ function getPlaceholderFontSize(size?: FormStyling['placeholderFontSize']): stri
 
 function getFieldSpacing(spacing?: FormStyling['fieldSpacing']): string {
   switch (spacing) {
+    case 'none': return '0';
     case 'compact': return '0.5rem';
     case 'relaxed': return '1.5rem';
     case 'spacious': return '2rem';

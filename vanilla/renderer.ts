@@ -958,11 +958,14 @@ export function renderForm(
 
   if (isInlineBtn) {
     btnWrapper.style.marginTop = '0';
+    btnWrapper.style.alignSelf = 'flex-end';
+    // Remove margin-bottom from last field in container
+    const lastChild = fieldsContainer.lastElementChild as HTMLElement | null;
+    if (lastChild) lastChild.style.marginBottom = '0';
     // Re-parent: remove fieldsContainer from form, put both in inline wrapper
     form.removeChild(fieldsContainer);
     const inlineWrapper = document.createElement('div');
     inlineWrapper.style.display = 'flex';
-    inlineWrapper.style.alignItems = 'flex-end';
     inlineWrapper.style.gap = '0.75rem';
     inlineWrapper.style.flexWrap = 'wrap';
     inlineWrapper.appendChild(fieldsContainer);

@@ -111,6 +111,7 @@ function getPlaceholderFontSize(size?: FormStyling['placeholderFontSize']): stri
 
 function getFieldSpacing(spacing?: FormStyling['fieldSpacing']): string {
   switch (spacing) {
+    case 'none': return '0';
     case 'compact': return '0.5rem';
     case 'relaxed': return '1.5rem';
     case 'spacious': return '2rem';
@@ -564,6 +565,7 @@ export function FormsExpertForm({
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+        ${styling.buttonAlign === 'inline' ? `form[data-fe-scope="${formScopeId}"] .fe-fields-inline > * { margin-bottom: 0 !important; }` : ''}
         form[data-fe-scope="${formScopeId}"] input:not([type="checkbox"]):not([type="radio"]):focus,
         form[data-fe-scope="${formScopeId}"] textarea:focus,
         form[data-fe-scope="${formScopeId}"] select:focus {
@@ -611,8 +613,8 @@ export function FormsExpertForm({
       )}
 
       {/* Inline wrapper when buttonAlign is 'inline' */}
-      <div style={styling.buttonAlign === 'inline' ? { display: 'flex', alignItems: 'flex-end', gap: '0.75rem', flexWrap: 'wrap' } : undefined}>
-      <div style={styling.buttonAlign === 'inline' ? { flex: '1 1 0', minWidth: '180px' } : undefined}>
+      <div style={styling.buttonAlign === 'inline' ? { display: 'flex', gap: '0.75rem', flexWrap: 'wrap' } : undefined}>
+      <div className={styling.buttonAlign === 'inline' ? 'fe-fields-inline' : undefined} style={styling.buttonAlign === 'inline' ? { flex: '1 1 0', minWidth: '180px' } : undefined}>
       {groupFieldsIntoRows(fields).map((group, idx) => {
         if (group.type === 'single') {
           return (
@@ -705,7 +707,7 @@ export function FormsExpertForm({
 
         return (
           <>
-            <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: styling.buttonAlign === 'inline' ? undefined : '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: styling.buttonAlign === 'inline' ? undefined : '1rem', gap: '0.5rem', flexWrap: 'wrap', ...(styling.buttonAlign === 'inline' ? { alignSelf: 'flex-end' } : {}) }}>
               {sec?.enabled && secStyle && sec.position === 'left' && (
                 <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                   {sec.icon && sec.iconPosition !== 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}

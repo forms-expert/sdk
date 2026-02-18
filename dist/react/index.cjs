@@ -679,6 +679,8 @@ function getPlaceholderFontSize(size) {
 }
 function getFieldSpacing(spacing) {
   switch (spacing) {
+    case "none":
+      return "0";
     case "compact":
       return "0.5rem";
     case "relaxed":
@@ -1080,6 +1082,7 @@ function FormsExpertForm({
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
+        ${styling.buttonAlign === "inline" ? `form[data-fe-scope="${formScopeId}"] .fe-fields-inline > * { margin-bottom: 0 !important; }` : ""}
         form[data-fe-scope="${formScopeId}"] input:not([type="checkbox"]):not([type="radio"]):focus,
         form[data-fe-scope="${formScopeId}"] textarea:focus,
         form[data-fe-scope="${formScopeId}"] select:focus {
@@ -1113,8 +1116,8 @@ function FormsExpertForm({
           marginBottom: "0.5rem",
           color: styling.textColor
         }, children: form.config.hostedConfig?.pageTitle || form.config.name }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styling.buttonAlign === "inline" ? { display: "flex", alignItems: "flex-end", gap: "0.75rem", flexWrap: "wrap" } : void 0, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styling.buttonAlign === "inline" ? { flex: "1 1 0", minWidth: "180px" } : void 0, children: groupFieldsIntoRows(fields).map((group, idx) => {
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styling.buttonAlign === "inline" ? { display: "flex", gap: "0.75rem", flexWrap: "wrap" } : void 0, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: styling.buttonAlign === "inline" ? "fe-fields-inline" : void 0, style: styling.buttonAlign === "inline" ? { flex: "1 1 0", minWidth: "180px" } : void 0, children: groupFieldsIntoRows(fields).map((group, idx) => {
             if (group.type === "single") {
               return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
                 FormFieldInput,
@@ -1187,7 +1190,7 @@ function FormsExpertForm({
               textOverflow: "ellipsis"
             } : void 0;
             return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: styling.buttonAlign === "inline" ? void 0 : "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: styling.buttonAlign === "inline" ? void 0 : "1rem", gap: "0.5rem", flexWrap: "wrap", ...styling.buttonAlign === "inline" ? { alignSelf: "flex-end" } : {} }, children: [
                 sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem" }, children: [
                   sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
                   /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
