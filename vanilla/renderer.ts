@@ -44,6 +44,18 @@ function addCustomClass(baseClass: string, customClass?: string): string {
   return customClass ? `${baseClass} ${customClass}` : baseClass;
 }
 
+function getWidthPercent(width?: string): string | undefined {
+  switch (width) {
+    case '1/4': return '25%';
+    case '1/3': return '33.333%';
+    case '1/2': return '50%';
+    case '2/3': return '66.666%';
+    case '3/4': return '75%';
+    case 'full': return '100%';
+    default: return undefined;
+  }
+}
+
 /**
  * Create a form field element
  */
@@ -647,12 +659,49 @@ export function renderForm(
     form.appendChild(title);
   }
   
-  // Render fields
+  // Render fields with row grouping
   const styling = schema.styling;
-  schema.fields.forEach((field) => {
-    const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
-    form.appendChild(fieldEl);
-  });
+  const fields = schema.fields;
+  let i = 0;
+  while (i < fields.length) {
+    const field = fields[i];
+    if (field.row != null) {
+      const rowFields: FormField[] = [field];
+      let j = i + 1;
+      while (j < fields.length && fields[j].row === field.row) {
+        rowFields.push(fields[j]);
+        j++;
+      }
+      if (rowFields.length > 1) {
+        const rowDiv = document.createElement('div');
+        rowDiv.style.display = 'flex';
+        rowDiv.style.gap = '0.75rem';
+        rowDiv.style.flexWrap = 'wrap';
+        rowFields.forEach((f) => {
+          const wrapper = document.createElement('div');
+          const wp = getWidthPercent(f.width);
+          if (wp) {
+            wrapper.style.flex = `0 0 calc(${wp} - 0.75rem)`;
+          } else {
+            wrapper.style.flex = '1 1 0';
+          }
+          wrapper.style.minWidth = '120px';
+          const fieldEl = renderField(f, values[f.name], errors[f.name], styling);
+          wrapper.appendChild(fieldEl);
+          rowDiv.appendChild(wrapper);
+        });
+        form.appendChild(rowDiv);
+      } else {
+        const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
+        form.appendChild(fieldEl);
+      }
+      i = j;
+    } else {
+      const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
+      form.appendChild(fieldEl);
+      i++;
+    }
+  }
   
   // Honeypot
   if (options.honeypot) {

@@ -593,6 +593,49 @@ function getFieldBorderRadius(radius) {
       return "0.375rem";
   }
 }
+function getWidthPercent(width) {
+  switch (width) {
+    case "1/4":
+      return "25%";
+    case "1/3":
+      return "33.333%";
+    case "1/2":
+      return "50%";
+    case "2/3":
+      return "66.666%";
+    case "3/4":
+      return "75%";
+    case "full":
+      return "100%";
+    default:
+      return void 0;
+  }
+}
+function groupFieldsIntoRows(fields) {
+  const result = [];
+  let i = 0;
+  while (i < fields.length) {
+    const field = fields[i];
+    if (field.row != null) {
+      const rowFields = [field];
+      let j = i + 1;
+      while (j < fields.length && fields[j].row === field.row) {
+        rowFields.push(fields[j]);
+        j++;
+      }
+      if (rowFields.length > 1) {
+        result.push({ type: "row", fields: rowFields });
+      } else {
+        result.push({ type: "single", field });
+      }
+      i = j;
+    } else {
+      result.push({ type: "single", field });
+      i++;
+    }
+  }
+  return result;
+}
 function getButtonRadius(radius) {
   switch (radius) {
     case "none":
@@ -1067,21 +1110,39 @@ function FormsExpertForm({
           marginBottom: "0.5rem",
           color: styling.textColor
         }, children: form.config.hostedConfig?.pageTitle || form.config.name }),
-        fields.map((field) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-          FormFieldInput,
-          {
-            field,
-            value: form.values[field.name],
-            error: form.errors[field.name],
-            onChange: handleChange,
-            onValueChange: (name, val) => form.setValue(name, val),
-            styling,
-            fieldSpacing,
-            labelSpacing,
-            phFontSize
-          },
-          field.name
-        )),
+        groupFieldsIntoRows(fields).map((group, idx) => {
+          if (group.type === "single") {
+            return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              FormFieldInput,
+              {
+                field: group.field,
+                value: form.values[group.field.name],
+                error: form.errors[group.field.name],
+                onChange: handleChange,
+                onValueChange: (name, val) => form.setValue(name, val),
+                styling,
+                fieldSpacing,
+                labelSpacing,
+                phFontSize
+              },
+              group.field.name
+            );
+          }
+          return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: fieldSpacing }, children: group.fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : "1 1 0", minWidth: "120px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            FormFieldInput,
+            {
+              field: f,
+              value: form.values[f.name],
+              error: form.errors[f.name],
+              onChange: handleChange,
+              onValueChange: (name, val) => form.setValue(name, val),
+              styling,
+              fieldSpacing: "0",
+              labelSpacing,
+              phFontSize
+            }
+          ) }, f.name)) }, `row-${idx}`);
+        }),
         form.honeypotEnabled && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { position: "absolute", left: "-9999px", opacity: 0, height: 0, overflow: "hidden" }, "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "text", name: "_hp", tabIndex: -1, autoComplete: "off" }) }),
         form.requiresCaptcha && form.captchaProvider !== "recaptcha" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: captchaContainerRef, style: { marginTop: "1rem" } }),
         (() => {

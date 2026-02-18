@@ -41,6 +41,46 @@ function getFieldBorderRadius(radius?: FormStyling['fieldBorderRadius']): string
   }
 }
 
+function getWidthPercent(width?: string): string | undefined {
+  switch (width) {
+    case '1/4': return '25%';
+    case '1/3': return '33.333%';
+    case '1/2': return '50%';
+    case '2/3': return '66.666%';
+    case '3/4': return '75%';
+    case 'full': return '100%';
+    default: return undefined;
+  }
+}
+
+type FieldRow = { type: 'single'; field: FormField } | { type: 'row'; fields: FormField[] };
+
+function groupFieldsIntoRows(fields: FormField[]): FieldRow[] {
+  const result: FieldRow[] = [];
+  let i = 0;
+  while (i < fields.length) {
+    const field = fields[i];
+    if (field.row != null) {
+      const rowFields: FormField[] = [field];
+      let j = i + 1;
+      while (j < fields.length && fields[j].row === field.row) {
+        rowFields.push(fields[j]);
+        j++;
+      }
+      if (rowFields.length > 1) {
+        result.push({ type: 'row', fields: rowFields });
+      } else {
+        result.push({ type: 'single', field });
+      }
+      i = j;
+    } else {
+      result.push({ type: 'single', field });
+      i++;
+    }
+  }
+  return result;
+}
+
 function getButtonRadius(radius?: FormStyling['buttonRadius']): string {
   switch (radius) {
     case 'none': return '0';
@@ -570,20 +610,43 @@ export function FormsExpertForm({
         </div>
       )}
 
-      {fields.map((field) => (
-        <FormFieldInput
-          key={field.name}
-          field={field}
-          value={form.values[field.name]}
-          error={form.errors[field.name]}
-          onChange={handleChange}
-          onValueChange={(name, val) => form.setValue(name, val)}
-          styling={styling}
-          fieldSpacing={fieldSpacing}
-          labelSpacing={labelSpacing}
-          phFontSize={phFontSize}
-        />
-      ))}
+      {groupFieldsIntoRows(fields).map((group, idx) => {
+        if (group.type === 'single') {
+          return (
+            <FormFieldInput
+              key={group.field.name}
+              field={group.field}
+              value={form.values[group.field.name]}
+              error={form.errors[group.field.name]}
+              onChange={handleChange}
+              onValueChange={(name, val) => form.setValue(name, val)}
+              styling={styling}
+              fieldSpacing={fieldSpacing}
+              labelSpacing={labelSpacing}
+              phFontSize={phFontSize}
+            />
+          );
+        }
+        return (
+          <div key={`row-${idx}`} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: fieldSpacing }}>
+            {group.fields.map((f) => (
+              <div key={f.name} style={{ flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : '1 1 0', minWidth: '120px' }}>
+                <FormFieldInput
+                  field={f}
+                  value={form.values[f.name]}
+                  error={form.errors[f.name]}
+                  onChange={handleChange}
+                  onValueChange={(name, val) => form.setValue(name, val)}
+                  styling={styling}
+                  fieldSpacing={'0'}
+                  labelSpacing={labelSpacing}
+                  phFontSize={phFontSize}
+                />
+              </div>
+            ))}
+          </div>
+        );
+      })}
 
       {/* Honeypot field — hidden from users, catches bots */}
       {form.honeypotEnabled && (
