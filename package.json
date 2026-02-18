@@ -1,6 +1,6 @@
 {
   "name": "@forms.expert/sdk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Forms SDK for submitting and rendering forms",
   "type": "module",
   "publishConfig": {

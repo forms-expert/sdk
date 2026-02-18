@@ -739,7 +739,28 @@ export function renderForm(
       </span>
     `;
   } else {
-    button.textContent = options.submitText || 'Submit';
+    const btnIcon = styling?.buttonIcon;
+    const btnIconPos = styling?.buttonIconPosition || 'left';
+    if (btnIcon) {
+      button.style.display = 'inline-flex';
+      button.style.alignItems = 'center';
+      button.style.gap = '0.5rem';
+      const iconSpan = document.createElement('span');
+      iconSpan.style.display = 'inline-flex';
+      iconSpan.style.flexShrink = '0';
+      iconSpan.innerHTML = btnIcon;
+      const textSpan = document.createElement('span');
+      textSpan.textContent = options.submitText || 'Submit';
+      if (btnIconPos === 'right') {
+        button.appendChild(textSpan);
+        button.appendChild(iconSpan);
+      } else {
+        button.appendChild(iconSpan);
+        button.appendChild(textSpan);
+      }
+    } else {
+      button.textContent = options.submitText || 'Submit';
+    }
   }
 
   // Secondary button helper
@@ -749,7 +770,26 @@ export function renderForm(
     const a = document.createElement('a');
     a.className = 'forms-expert-secondary-btn';
     a.href = sec.href || '#';
-    a.textContent = sec.text || 'Learn More';
+    a.style.display = 'inline-flex';
+    a.style.alignItems = 'center';
+    a.style.gap = '0.5rem';
+    if (sec.icon) {
+      const iconSpan = document.createElement('span');
+      iconSpan.style.display = 'inline-flex';
+      iconSpan.style.flexShrink = '0';
+      iconSpan.innerHTML = sec.icon;
+      const textSpan = document.createElement('span');
+      textSpan.textContent = sec.text || 'Learn More';
+      if (sec.iconPosition === 'right') {
+        a.appendChild(textSpan);
+        a.appendChild(iconSpan);
+      } else {
+        a.appendChild(iconSpan);
+        a.appendChild(textSpan);
+      }
+    } else {
+      a.textContent = sec.text || 'Learn More';
+    }
     if (sec.openInNewTab) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
     const btnColor = styling?.primaryColor || '#3b82f6';
     const secColor = sec.color || btnColor;

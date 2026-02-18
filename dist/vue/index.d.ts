@@ -67,6 +67,8 @@ interface SecondaryButton {
     color?: string;
     textColor?: string;
     fontSize?: number;
+    icon?: string;
+    iconPosition?: 'left' | 'right';
 }
 /**
  * Form styling configuration
@@ -101,6 +103,8 @@ interface FormStyling {
     buttonGradient?: string;
     buttonFullWidth?: boolean;
     buttonFontSize?: number;
+    buttonIcon?: string;
+    buttonIconPosition?: 'left' | 'right';
     fieldSpacing?: 'compact' | 'normal' | 'relaxed' | 'spacious';
     formPadding?: 'none' | 'compact' | 'normal' | 'relaxed' | 'spacious';
     labelSpacing?: 'compact' | 'normal' | 'relaxed';
@@ -117,6 +121,8 @@ interface FormStyling {
     backgroundOverlay?: number;
     transparentBackground?: boolean;
     secondaryButton?: SecondaryButton;
+    inputBackgroundColor?: string;
+    placeholderColor?: string;
 }
 /**
  * Form schema

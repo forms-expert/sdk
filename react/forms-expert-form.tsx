@@ -559,7 +559,7 @@ export function FormsExpertForm({
       )}
       {/* Scoped placeholder styles */}
       <style dangerouslySetInnerHTML={{ __html: `
-        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }
+        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize};${styling.placeholderColor ? ` color: ${styling.placeholderColor};` : ''} }
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:hover:not(:disabled) { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
@@ -703,8 +703,10 @@ export function FormsExpertForm({
           <>
             <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
               {sec?.enabled && secStyle && sec.position === 'left' && (
-                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={secStyle}>
-                  {sec.text || 'Learn More'}
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {sec.icon && sec.iconPosition !== 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
+                  <span>{sec.text || 'Learn More'}</span>
+                  {sec.icon && sec.iconPosition === 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
                 </a>
               )}
               <button
@@ -736,13 +738,25 @@ export function FormsExpertForm({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
                 }}
               >
-                {form.isLoading ? 'Submitting...' : resolvedButtonText}
+                {!form.isLoading && styling.buttonIcon && styling.buttonIconPosition !== 'right' && (
+                  <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: styling.buttonIcon }} />
+                )}
+                <span>{form.isLoading ? 'Submitting...' : resolvedButtonText}</span>
+                {!form.isLoading && styling.buttonIcon && styling.buttonIconPosition === 'right' && (
+                  <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: styling.buttonIcon }} />
+                )}
               </button>
               {sec?.enabled && secStyle && sec.position !== 'left' && sec.position !== 'below' && (
-                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, marginLeft: 'auto' }}>
-                  {sec.text || 'Learn More'}
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+                  {sec.icon && sec.iconPosition !== 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
+                  <span>{sec.text || 'Learn More'}</span>
+                  {sec.icon && sec.iconPosition === 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
                 </a>
               )}
             </div>
@@ -753,8 +767,10 @@ export function FormsExpertForm({
                 marginTop: sec.marginTop != null ? `${sec.marginTop}px` : '0.5rem',
                 marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : undefined,
               }}>
-                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, marginTop: 0, marginBottom: 0 }}>
-                  {sec.text || 'Learn More'}
+                <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginTop: 0, marginBottom: 0 }}>
+                  {sec.icon && sec.iconPosition !== 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
+                  <span>{sec.text || 'Learn More'}</span>
+                  {sec.icon && sec.iconPosition === 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
                 </a>
               </div>
             )}
@@ -844,7 +860,7 @@ function FormFieldInput({
     borderRadius: isBottomBorder ? 0 : fieldRadius,
     fontSize,
     fontFamily: 'inherit',
-    backgroundColor: styling.theme === 'dark' ? '#374151' : '#ffffff',
+    backgroundColor: styling.inputBackgroundColor || (styling.theme === 'dark' ? '#374151' : '#ffffff'),
     color: styling.textColor,
   };
 

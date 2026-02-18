@@ -219,14 +219,14 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
   font-family: inherit;
-  background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
+  background-color: ${s.inputBackgroundColor || (s.theme === 'dark' ? '#374151' : '#ffffff')};
   color: ${s.textColor};
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .forms-expert-input::placeholder,
 .forms-expert-textarea::placeholder {
-  font-size: ${phFontSize};
+  font-size: ${phFontSize};${s.placeholderColor ? `\n  color: ${s.placeholderColor};` : ''}
 }
 
 .forms-expert-input:focus,
@@ -274,7 +274,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
   border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
-  background-color: ${s.theme === 'dark' ? '#374151' : '#ffffff'};
+  background-color: ${s.inputBackgroundColor || (s.theme === 'dark' ? '#374151' : '#ffffff')};
   cursor: pointer;
 }
 

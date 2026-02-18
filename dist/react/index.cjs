@@ -1072,7 +1072,7 @@ function FormsExpertForm({
       children: [
         googleFontUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("link", { rel: "stylesheet", href: googleFontUrl }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { dangerouslySetInnerHTML: { __html: `
-        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize}; }
+        form[data-fe-scope="${formScopeId}"] input::placeholder, form[data-fe-scope="${formScopeId}"] textarea::placeholder { font-size: ${phFontSize};${styling.placeholderColor ? ` color: ${styling.placeholderColor};` : ""} }
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:hover:not(:disabled) { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
@@ -1184,8 +1184,12 @@ function FormsExpertForm({
           } : void 0;
           return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
-              sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: secStyle, children: sec.text || "Learn More" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem" }, children: [
+                sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
+                sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                 "button",
                 {
                   type: "submit",
@@ -1209,19 +1213,35 @@ function FormsExpertForm({
                     minWidth: 0,
                     whiteSpace: "nowrap",
                     overflow: "hidden",
-                    textOverflow: "ellipsis"
+                    textOverflow: "ellipsis",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem"
                   },
-                  children: form.isLoading ? "Submitting..." : resolvedButtonText
+                  children: [
+                    !form.isLoading && styling.buttonIcon && styling.buttonIconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } }),
+                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: form.isLoading ? "Submitting..." : resolvedButtonText }),
+                    !form.isLoading && styling.buttonIcon && styling.buttonIconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } })
+                  ]
                 }
               ),
-              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, marginLeft: "auto" }, children: sec.text || "Learn More" })
+              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }, children: [
+                sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
+                sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+              ] })
             ] }),
             sec?.enabled && secStyle && sec.position === "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
               display: "flex",
               justifyContent: sec.align === "center" ? "center" : sec.align === "right" ? "flex-end" : sec.align === "left" ? "flex-start" : btnAlign,
               marginTop: sec.marginTop != null ? `${sec.marginTop}px` : "0.5rem",
               marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
-            }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, marginTop: 0, marginBottom: 0 }, children: sec.text || "Learn More" }) })
+            }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: 0, marginBottom: 0 }, children: [
+              sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
+              sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+            ] }) })
           ] });
         })(),
         showBranding && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
@@ -1289,7 +1309,7 @@ function FormFieldInput({
     borderRadius: isBottomBorder ? 0 : fieldRadius,
     fontSize,
     fontFamily: "inherit",
-    backgroundColor: styling.theme === "dark" ? "#374151" : "#ffffff",
+    backgroundColor: styling.inputBackgroundColor || (styling.theme === "dark" ? "#374151" : "#ffffff"),
     color: styling.textColor
   };
   const getOpts = () => {
