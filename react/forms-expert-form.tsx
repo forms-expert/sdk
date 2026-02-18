@@ -610,6 +610,9 @@ export function FormsExpertForm({
         </div>
       )}
 
+      {/* Inline wrapper when buttonAlign is 'inline' */}
+      <div style={styling.buttonAlign === 'inline' ? { display: 'flex', alignItems: 'flex-end', gap: '0.75rem', flexWrap: 'wrap' } : undefined}>
+      <div style={styling.buttonAlign === 'inline' ? { flex: '1 1 0', minWidth: '180px' } : undefined}>
       {groupFieldsIntoRows(fields).map((group, idx) => {
         if (group.type === 'single') {
           return (
@@ -647,6 +650,7 @@ export function FormsExpertForm({
           </div>
         );
       })}
+      </div>{/* end fields wrapper */}
 
       {/* Honeypot field — hidden from users, catches bots */}
       {form.honeypotEnabled && (
@@ -701,7 +705,7 @@ export function FormsExpertForm({
 
         return (
           <>
-            <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: btnAlign, marginTop: styling.buttonAlign === 'inline' ? undefined : '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
               {sec?.enabled && secStyle && sec.position === 'left' && (
                 <a href={sec.href || '#'} target={sec.openInNewTab ? '_blank' : undefined} rel={sec.openInNewTab ? 'noopener noreferrer' : undefined} style={{ ...secStyle, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                   {sec.icon && sec.iconPosition !== 'right' && <span style={{ display: 'inline-flex', flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: sec.icon }} />}
@@ -777,6 +781,7 @@ export function FormsExpertForm({
           </>
         );
       })()}
+      </div>{/* end inline wrapper */}
 
       {showBranding && (
         <div

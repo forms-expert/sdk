@@ -1113,140 +1113,142 @@ function FormsExpertForm({
           marginBottom: "0.5rem",
           color: styling.textColor
         }, children: form.config.hostedConfig?.pageTitle || form.config.name }),
-        groupFieldsIntoRows(fields).map((group, idx) => {
-          if (group.type === "single") {
-            return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styling.buttonAlign === "inline" ? { display: "flex", alignItems: "flex-end", gap: "0.75rem", flexWrap: "wrap" } : void 0, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styling.buttonAlign === "inline" ? { flex: "1 1 0", minWidth: "180px" } : void 0, children: groupFieldsIntoRows(fields).map((group, idx) => {
+            if (group.type === "single") {
+              return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+                FormFieldInput,
+                {
+                  field: group.field,
+                  value: form.values[group.field.name],
+                  error: form.errors[group.field.name],
+                  onChange: handleChange,
+                  onValueChange: (name, val) => form.setValue(name, val),
+                  styling,
+                  fieldSpacing,
+                  labelSpacing,
+                  phFontSize
+                },
+                group.field.name
+              );
+            }
+            return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: fieldSpacing }, children: group.fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : "1 1 0", minWidth: "180px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
               FormFieldInput,
               {
-                field: group.field,
-                value: form.values[group.field.name],
-                error: form.errors[group.field.name],
+                field: f,
+                value: form.values[f.name],
+                error: form.errors[f.name],
                 onChange: handleChange,
                 onValueChange: (name, val) => form.setValue(name, val),
                 styling,
-                fieldSpacing,
+                fieldSpacing: "0",
                 labelSpacing,
                 phFontSize
-              },
-              group.field.name
-            );
-          }
-          return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: fieldSpacing }, children: group.fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : "1 1 0", minWidth: "180px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            FormFieldInput,
-            {
-              field: f,
-              value: form.values[f.name],
-              error: form.errors[f.name],
-              onChange: handleChange,
-              onValueChange: (name, val) => form.setValue(name, val),
-              styling,
-              fieldSpacing: "0",
-              labelSpacing,
-              phFontSize
-            }
-          ) }, f.name)) }, `row-${idx}`);
-        }),
-        form.honeypotEnabled && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { position: "absolute", left: "-9999px", opacity: 0, height: 0, overflow: "hidden" }, "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "text", name: "_hp", tabIndex: -1, autoComplete: "off" }) }),
-        form.requiresCaptcha && form.captchaProvider !== "recaptcha" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: captchaContainerRef, style: { marginTop: "1rem" } }),
-        (() => {
-          const btnSizeMap = {
-            small: { px: "0.75rem", py: "0.375rem", fs: "0.875rem" },
-            medium: { px: "1.25rem", py: "0.625rem", fs: "1rem" },
-            large: { px: "1.75rem", py: "0.875rem", fs: "1.125rem" }
-          };
-          const btnSize = btnSizeMap[styling.buttonSize || "medium"];
-          const btnPx = styling.buttonPaddingX != null ? `${styling.buttonPaddingX}px` : btnSize.px;
-          const btnPy = styling.buttonPaddingY != null ? `${styling.buttonPaddingY}px` : btnSize.py;
-          const btnFs = styling.buttonFontSize != null ? `${styling.buttonFontSize}px` : btnSize.fs;
-          const btnBg = styling.buttonGradient || (styling.buttonStyle === "filled" ? btnBgColor : "transparent");
-          const sec = styling.secondaryButton;
-          const secColor = sec?.color || btnBgColor;
-          const secStyle = sec?.enabled ? {
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: `${btnPy} ${btnPx}`,
-            fontWeight: 500,
-            fontSize: sec.fontSize != null ? `${sec.fontSize}px` : btnFs,
-            fontFamily: "inherit",
-            borderRadius: btnRadius,
-            cursor: "pointer",
-            textDecoration: sec.style === "link" ? "underline" : "none",
-            background: sec.style === "filled" ? secColor : "transparent",
-            color: sec.textColor || (sec.style === "filled" ? "#ffffff" : secColor),
-            border: sec.style === "outlined" ? `2px solid ${secColor}` : "none",
-            marginTop: sec.marginTop != null ? `${sec.marginTop}px` : void 0,
-            marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0,
-            maxWidth: "100%",
-            boxSizing: "border-box",
-            flexShrink: 1,
-            minWidth: 0,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis"
-          } : void 0;
-          return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
-              sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem" }, children: [
-                sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
-                sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+              }
+            ) }, f.name)) }, `row-${idx}`);
+          }) }),
+          form.honeypotEnabled && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { position: "absolute", left: "-9999px", opacity: 0, height: 0, overflow: "hidden" }, "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "text", name: "_hp", tabIndex: -1, autoComplete: "off" }) }),
+          form.requiresCaptcha && form.captchaProvider !== "recaptcha" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: captchaContainerRef, style: { marginTop: "1rem" } }),
+          (() => {
+            const btnSizeMap = {
+              small: { px: "0.75rem", py: "0.375rem", fs: "0.875rem" },
+              medium: { px: "1.25rem", py: "0.625rem", fs: "1rem" },
+              large: { px: "1.75rem", py: "0.875rem", fs: "1.125rem" }
+            };
+            const btnSize = btnSizeMap[styling.buttonSize || "medium"];
+            const btnPx = styling.buttonPaddingX != null ? `${styling.buttonPaddingX}px` : btnSize.px;
+            const btnPy = styling.buttonPaddingY != null ? `${styling.buttonPaddingY}px` : btnSize.py;
+            const btnFs = styling.buttonFontSize != null ? `${styling.buttonFontSize}px` : btnSize.fs;
+            const btnBg = styling.buttonGradient || (styling.buttonStyle === "filled" ? btnBgColor : "transparent");
+            const sec = styling.secondaryButton;
+            const secColor = sec?.color || btnBgColor;
+            const secStyle = sec?.enabled ? {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: `${btnPy} ${btnPx}`,
+              fontWeight: 500,
+              fontSize: sec.fontSize != null ? `${sec.fontSize}px` : btnFs,
+              fontFamily: "inherit",
+              borderRadius: btnRadius,
+              cursor: "pointer",
+              textDecoration: sec.style === "link" ? "underline" : "none",
+              background: sec.style === "filled" ? secColor : "transparent",
+              color: sec.textColor || (sec.style === "filled" ? "#ffffff" : secColor),
+              border: sec.style === "outlined" ? `2px solid ${secColor}` : "none",
+              marginTop: sec.marginTop != null ? `${sec.marginTop}px` : void 0,
+              marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0,
+              maxWidth: "100%",
+              boxSizing: "border-box",
+              flexShrink: 1,
+              minWidth: 0,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            } : void 0;
+            return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: btnAlign, marginTop: styling.buttonAlign === "inline" ? void 0 : "1rem", gap: "0.5rem", flexWrap: "wrap" }, children: [
+                sec?.enabled && secStyle && sec.position === "left" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem" }, children: [
+                  sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
+                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
+                  sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+                  "button",
+                  {
+                    type: "submit",
+                    disabled: form.isLoading,
+                    className: styling.buttonClassName,
+                    style: {
+                      ...styling.buttonFullWidth ? { width: "100%" } : styling.buttonAlign ? {} : { width: "100%" },
+                      padding: `${btnPy} ${btnPx}`,
+                      fontWeight: 500,
+                      fontSize: btnFs,
+                      fontFamily: "inherit",
+                      borderRadius: btnRadius,
+                      cursor: form.isLoading ? "not-allowed" : "pointer",
+                      opacity: form.isLoading ? 0.5 : 1,
+                      background: btnBg,
+                      color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
+                      border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`,
+                      maxWidth: "100%",
+                      boxSizing: "border-box",
+                      flexShrink: 1,
+                      minWidth: 0,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.5rem"
+                    },
+                    children: [
+                      !form.isLoading && styling.buttonIcon && styling.buttonIconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } }),
+                      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: form.isLoading ? "Submitting..." : resolvedButtonText }),
+                      !form.isLoading && styling.buttonIcon && styling.buttonIconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } })
+                    ]
+                  }
+                ),
+                sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }, children: [
+                  sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
+                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
+                  sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
+                ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-                "button",
-                {
-                  type: "submit",
-                  disabled: form.isLoading,
-                  className: styling.buttonClassName,
-                  style: {
-                    ...styling.buttonFullWidth ? { width: "100%" } : styling.buttonAlign ? {} : { width: "100%" },
-                    padding: `${btnPy} ${btnPx}`,
-                    fontWeight: 500,
-                    fontSize: btnFs,
-                    fontFamily: "inherit",
-                    borderRadius: btnRadius,
-                    cursor: form.isLoading ? "not-allowed" : "pointer",
-                    opacity: form.isLoading ? 0.5 : 1,
-                    background: btnBg,
-                    color: styling.buttonStyle === "filled" ? btnTextColor || "white" : btnBgColor,
-                    border: styling.buttonStyle === "filled" ? "none" : `2px solid ${btnBgColor}`,
-                    maxWidth: "100%",
-                    boxSizing: "border-box",
-                    flexShrink: 1,
-                    minWidth: 0,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "0.5rem"
-                  },
-                  children: [
-                    !form.isLoading && styling.buttonIcon && styling.buttonIconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } }),
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: form.isLoading ? "Submitting..." : resolvedButtonText }),
-                    !form.isLoading && styling.buttonIcon && styling.buttonIconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: styling.buttonIcon } })
-                  ]
-                }
-              ),
-              sec?.enabled && secStyle && sec.position !== "left" && sec.position !== "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }, children: [
+              sec?.enabled && secStyle && sec.position === "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
+                display: "flex",
+                justifyContent: sec.align === "center" ? "center" : sec.align === "right" ? "flex-end" : sec.align === "left" ? "flex-start" : btnAlign,
+                marginTop: sec.marginTop != null ? `${sec.marginTop}px` : "0.5rem",
+                marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
+              }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: 0, marginBottom: 0 }, children: [
                 sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
                 sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
-              ] })
-            ] }),
-            sec?.enabled && secStyle && sec.position === "below" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
-              display: "flex",
-              justifyContent: sec.align === "center" ? "center" : sec.align === "right" ? "flex-end" : sec.align === "left" ? "flex-start" : btnAlign,
-              marginTop: sec.marginTop != null ? `${sec.marginTop}px` : "0.5rem",
-              marginBottom: sec.marginBottom != null ? `${sec.marginBottom}px` : void 0
-            }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("a", { href: sec.href || "#", target: sec.openInNewTab ? "_blank" : void 0, rel: sec.openInNewTab ? "noopener noreferrer" : void 0, style: { ...secStyle, display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: 0, marginBottom: 0 }, children: [
-              sec.icon && sec.iconPosition !== "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: sec.text || "Learn More" }),
-              sec.icon && sec.iconPosition === "right" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { display: "inline-flex", flexShrink: 0 }, dangerouslySetInnerHTML: { __html: sec.icon } })
-            ] }) })
-          ] });
-        })(),
+              ] }) })
+            ] });
+          })()
+        ] }),
         showBranding && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
           "div",
           {

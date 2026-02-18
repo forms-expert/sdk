@@ -780,6 +780,9 @@ export function renderForm(
   // Render fields with row grouping
   const styling = schema.styling;
   const fields = schema.fields;
+  const isInlineBtn = styling?.buttonAlign === 'inline';
+  const fieldsContainer = document.createElement('div');
+  if (isInlineBtn) { fieldsContainer.style.flex = '1 1 0'; fieldsContainer.style.minWidth = '180px'; }
   let i = 0;
   while (i < fields.length) {
     const field = fields[i];
@@ -808,18 +811,19 @@ export function renderForm(
           wrapper.appendChild(fieldEl);
           rowDiv.appendChild(wrapper);
         });
-        form.appendChild(rowDiv);
+        fieldsContainer.appendChild(rowDiv);
       } else {
         const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
-        form.appendChild(fieldEl);
+        fieldsContainer.appendChild(fieldEl);
       }
       i = j;
     } else {
       const fieldEl = renderField(field, values[field.name], errors[field.name], styling);
-      form.appendChild(fieldEl);
+      fieldsContainer.appendChild(fieldEl);
       i++;
     }
   }
+  form.appendChild(fieldsContainer);
   
   // Honeypot
   if (options.honeypot) {
@@ -952,7 +956,21 @@ export function renderForm(
     }
   }
 
-  form.appendChild(btnWrapper);
+  if (isInlineBtn) {
+    btnWrapper.style.marginTop = '0';
+    // Re-parent: remove fieldsContainer from form, put both in inline wrapper
+    form.removeChild(fieldsContainer);
+    const inlineWrapper = document.createElement('div');
+    inlineWrapper.style.display = 'flex';
+    inlineWrapper.style.alignItems = 'flex-end';
+    inlineWrapper.style.gap = '0.75rem';
+    inlineWrapper.style.flexWrap = 'wrap';
+    inlineWrapper.appendChild(fieldsContainer);
+    inlineWrapper.appendChild(btnWrapper);
+    form.appendChild(inlineWrapper);
+  } else {
+    form.appendChild(btnWrapper);
+  }
 
   // Secondary button (below)
   if (sec?.enabled && sec.position === 'below') {

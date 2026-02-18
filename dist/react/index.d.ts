@@ -102,7 +102,7 @@ interface FormStyling {
     buttonColor?: string;
     buttonText?: string;
     buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    buttonAlign?: 'left' | 'center' | 'right';
+    buttonAlign?: 'left' | 'center' | 'right' | 'inline';
     buttonSize?: 'small' | 'medium' | 'large';
     buttonPaddingX?: number;
     buttonPaddingY?: number;
