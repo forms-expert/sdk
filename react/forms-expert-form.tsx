@@ -574,6 +574,7 @@ export function FormsExpertForm({
           box-shadow: 0 0 0 2px ${styling.primaryColor || '#3b82f6'}33 !important;
           -webkit-appearance: none;
         }
+        ${styling.customCss || ''}
       ` }} />
       {/* Logo */}
       {styling.logoUrl && (

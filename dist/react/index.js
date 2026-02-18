@@ -1069,6 +1069,7 @@ function FormsExpertForm({
           box-shadow: 0 0 0 2px ${styling.primaryColor || "#3b82f6"}33 !important;
           -webkit-appearance: none;
         }
+        ${styling.customCss || ""}
       ` } }),
         styling.logoUrl && /* @__PURE__ */ jsx2("div", { style: {
           textAlign: styling.logoPosition === "top-left" ? "left" : styling.logoPosition === "top-right" ? "right" : "center",
