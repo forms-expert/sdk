@@ -109,6 +109,8 @@ export interface FormStyling {
   fieldLayout?: 'stacked' | 'inline';
   fieldBorderStyle?: 'full' | 'bottom';
   fieldBorderRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  fieldPaddingX?: number;
+  fieldPaddingY?: number;
   buttonColor?: string;
   buttonText?: string;
   buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';

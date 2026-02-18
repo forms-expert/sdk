@@ -1058,7 +1058,7 @@ function FormsExpertForm({
         form[data-fe-scope="${formScopeId}"] button[type="submit"]:active:not(:disabled) { filter: brightness(0.85); transform: scale(0.98); }
         form[data-fe-scope="${formScopeId}"] a[href]:hover { filter: brightness(0.9); }
         form[data-fe-scope="${formScopeId}"] a[href]:active { filter: brightness(0.85); }
-        form[data-fe-scope="${formScopeId}"] input:focus,
+        form[data-fe-scope="${formScopeId}"] input:not([type="checkbox"]):not([type="radio"]):focus,
         form[data-fe-scope="${formScopeId}"] textarea:focus,
         form[data-fe-scope="${formScopeId}"] select:focus {
           outline: none !important;
@@ -1282,9 +1282,10 @@ function FormFieldInput({
   const fontSize = getFontSize(styling.fontSize);
   const isInline = styling.labelPosition === "left" || styling.fieldLayout === "inline";
   const isBottomBorder = styling.fieldBorderStyle === "bottom";
+  const fieldPadding = styling.fieldPaddingX != null || styling.fieldPaddingY != null ? `${styling.fieldPaddingY ?? 8}px ${styling.fieldPaddingX ?? 12}px` : "0.5rem 0.75rem";
   const inputStyle = {
     width: "100%",
-    padding: "0.5rem 0.75rem",
+    padding: fieldPadding,
     border: isBottomBorder ? "none" : `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}`,
     ...isBottomBorder ? { borderBottom: `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } : {},
     borderRadius: isBottomBorder ? 0 : fieldRadius,
@@ -1334,7 +1335,7 @@ function FormFieldInput({
           checked: Boolean(value),
           onChange,
           required: field.required,
-          style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor, marginTop: "0.125rem", flexShrink: 0 }
+          style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor, marginTop: "0.125rem", flexShrink: 0, backgroundColor: "transparent" }
         }
       ),
       /* @__PURE__ */ jsxs("div", { children: [

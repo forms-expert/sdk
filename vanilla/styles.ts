@@ -213,7 +213,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-textarea,
 .forms-expert-select {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: ${s.fieldPaddingX != null || s.fieldPaddingY != null ? `${s.fieldPaddingY ?? 8}px ${s.fieldPaddingX ?? 12}px` : '0.5rem 0.75rem'};
   border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
   ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
   border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
@@ -262,6 +262,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   margin-top: 0.125rem;
   flex-shrink: 0;
   accent-color: ${s.primaryColor};
+  background-color: transparent;
   cursor: pointer;
 }
 
