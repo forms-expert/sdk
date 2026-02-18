@@ -408,7 +408,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   text-align: center;
   margin-top: 1rem;
   padding-top: 0.75rem;
-  border-top: 1px solid ${s.theme === 'dark' ? '#374151' : '#e5e7eb'};
+  border-top: 1px solid ${separatorColor};
 }
 
 .forms-expert-branding a {

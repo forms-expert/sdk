@@ -264,7 +264,7 @@ var L={theme:"light",primaryColor:"#3b82f6",backgroundColor:"#ffffff",textColor:
   text-align: center;
   margin-top: 1rem;
   padding-top: 0.75rem;
-  border-top: 1px solid ${e.theme==="dark"?"#374151":"#e5e7eb"};
+  border-top: 1px solid ${g};
 }
 
 .forms-expert-branding a {

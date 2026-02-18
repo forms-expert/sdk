@@ -784,7 +784,7 @@ export function FormsExpertForm({
             textAlign: 'center',
             marginTop: '1rem',
             paddingTop: '0.75rem',
-            borderTop: `1px solid ${styling.theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+            borderTop: `1px solid ${styling.separatorColor || (styling.theme === 'dark' ? '#374151' : '#e5e7eb')}`,
           }}
         >
           <a
@@ -1118,7 +1118,7 @@ function FormFieldInput({
   } else if (field.type === 'file') {
     const fileValue = value as File | undefined;
     const formatSize = (size: number) => size < 1024 ? `${size} B` : size < 1048576 ? `${(size / 1024).toFixed(1)} KB` : `${(size / 1048576).toFixed(1)} MB`;
-    const borderColor = error ? (styling.errorColor || '#ef4444') : styling.theme === 'dark' ? '#4b5563' : '#d1d5db';
+    const borderColor = error ? (styling.errorColor || '#ef4444') : styling.fieldBorderColor || (styling.theme === 'dark' ? '#4b5563' : '#d1d5db');
     const mutedColor = styling.theme === 'dark' ? '#9ca3af' : '#6b7280';
     fieldEl = (
       <label
