@@ -1305,11 +1305,12 @@ function FormFieldInput({
   const isInline = styling.labelPosition === "left" || styling.fieldLayout === "inline";
   const isBottomBorder = styling.fieldBorderStyle === "bottom";
   const fieldPadding = styling.fieldPaddingX != null || styling.fieldPaddingY != null ? `${styling.fieldPaddingY ?? 8}px ${styling.fieldPaddingX ?? 12}px` : "0.5rem 0.75rem";
+  const defaultBorderColor = error ? "#ef4444" : styling.fieldBorderColor || (styling.theme === "dark" ? "#4b5563" : "#d1d5db");
   const inputStyle = {
     width: "100%",
     padding: fieldPadding,
-    border: isBottomBorder ? "none" : `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}`,
-    ...isBottomBorder ? { borderBottom: `1px solid ${error ? "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } : {},
+    border: isBottomBorder ? "none" : `1px solid ${defaultBorderColor}`,
+    ...isBottomBorder ? { borderBottom: `1px solid ${defaultBorderColor}` } : {},
     borderRadius: isBottomBorder ? 0 : fieldRadius,
     fontSize,
     fontFamily: "inherit",
@@ -1327,7 +1328,7 @@ function FormFieldInput({
     ] });
   }
   if (field.type === "divider") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("hr", { style: { marginBottom: fieldSpacing, border: "none", borderTop: `1px solid ${styling.theme === "dark" ? "#4b5563" : "#d1d5db"}` } });
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("hr", { style: { marginBottom: fieldSpacing, border: "none", borderTop: `1px solid ${styling.separatorColor || (styling.theme === "dark" ? "#4b5563" : "#d1d5db")}` } });
   }
   if (field.type === "paragraph") {
     const pSize = field.paragraphFontSize ? `${field.paragraphFontSize}px` : getParagraphSize(styling.paragraphSize);
@@ -1537,18 +1538,91 @@ function FormFieldInput({
       opt.value
     )) });
   } else if (field.type === "file") {
-    fieldEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-      "input",
+    const fileValue = value;
+    const formatSize = (size) => size < 1024 ? `${size} B` : size < 1048576 ? `${(size / 1024).toFixed(1)} KB` : `${(size / 1048576).toFixed(1)} MB`;
+    const borderColor = error ? styling.errorColor || "#ef4444" : styling.theme === "dark" ? "#4b5563" : "#d1d5db";
+    const mutedColor = styling.theme === "dark" ? "#9ca3af" : "#6b7280";
+    fieldEl = /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "label",
       {
-        type: "file",
-        id: field.name,
-        name: field.name,
-        onChange,
-        required: field.required,
-        accept: field.allowedMimeTypes?.join(","),
-        multiple: field.multiple,
-        style: inputStyle,
-        className: styling.fieldClassName
+        htmlFor: field.name,
+        style: {
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "0.5rem",
+          borderRadius: fieldRadius,
+          border: `2px dashed ${borderColor}`,
+          padding: "1.5rem",
+          cursor: "pointer",
+          transition: "border-color 0.15s, background-color 0.15s",
+          backgroundColor: fileValue ? styling.theme === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)" : "transparent"
+        },
+        onDragOver: (e) => {
+          e.preventDefault();
+          e.currentTarget.style.borderColor = styling.primaryColor || "#3b82f6";
+          e.currentTarget.style.backgroundColor = styling.theme === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)";
+        },
+        onDragLeave: (e) => {
+          e.currentTarget.style.borderColor = borderColor;
+          e.currentTarget.style.backgroundColor = fileValue ? styling.theme === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)" : "transparent";
+        },
+        onDrop: (e) => {
+          e.preventDefault();
+          e.currentTarget.style.borderColor = borderColor;
+          e.currentTarget.style.backgroundColor = "transparent";
+          const file = e.dataTransfer.files?.[0];
+          if (file) onValueChange(field.name, file);
+        },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "input",
+            {
+              id: field.name,
+              name: field.name,
+              type: "file",
+              style: { position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 },
+              onChange,
+              required: field.required,
+              accept: field.allowedMimeTypes?.join(","),
+              multiple: field.multiple
+            }
+          ),
+          fileValue ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", width: "32", height: "32", viewBox: "0 0 24 24", fill: "none", stroke: styling.primaryColor || "#3b82f6", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M14 2v4a2 2 0 0 0 2 2h4" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "0.875rem", fontWeight: 500, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: fileValue.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "0.75rem", color: mutedColor }, children: formatSize(fileValue.size) }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              "button",
+              {
+                type: "button",
+                style: { fontSize: "0.75rem", color: styling.errorColor || "#ef4444", background: "none", border: "none", cursor: "pointer", marginTop: "0.25rem", textDecoration: "underline" },
+                onClick: (e) => {
+                  e.preventDefault();
+                  onValueChange(field.name, void 0);
+                },
+                children: "Remove"
+              }
+            )
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", width: "32", height: "32", viewBox: "0 0 24 24", fill: "none", stroke: mutedColor, strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("polyline", { points: "17 8 12 3 7 8" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("line", { x1: "12", x2: "12", y1: "3", y2: "15" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "0.875rem", fontWeight: 500 }, children: "Drag & drop a file here, or click to browse" }),
+            field.allowedMimeTypes && field.allowedMimeTypes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "0.75rem", color: mutedColor }, children: field.allowedMimeTypes.join(", ") }),
+            field.maxFileSize && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: "0.75rem", color: mutedColor }, children: [
+              "Max size: ",
+              formatSize(field.maxFileSize)
+            ] })
+          ] })
+        ]
       }
     );
   } else if (field.type === "name") {

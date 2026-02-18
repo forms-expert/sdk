@@ -108,9 +108,11 @@ export interface FormStyling {
   formWidth?: 'narrow' | 'medium' | 'wide' | 'full';
   fieldLayout?: 'stacked' | 'inline';
   fieldBorderStyle?: 'full' | 'bottom';
+  fieldBorderColor?: string;
   fieldBorderRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
   fieldPaddingX?: number;
   fieldPaddingY?: number;
+  separatorColor?: string;
   buttonColor?: string;
   buttonText?: string;
   buttonRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';

@@ -117,6 +117,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   const formWidth = getFormWidth(s.formWidth);
   const btnBgColor = s.primaryColor;
   const btnTextColor = s.buttonColor;
+  const borderColor = s.fieldBorderColor || (s.theme === 'dark' ? '#4b5563' : '#d1d5db');
+  const separatorColor = s.separatorColor || (s.theme === 'dark' ? '#4b5563' : '#d1d5db');
   // Normalize font family - support legacy single values by adding fallbacks
   // For SDK embedded forms, default to 'inherit' so the form uses the website's font
   const fontFamily = s.fontFamily 
@@ -214,8 +216,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-select {
   width: 100%;
   padding: ${s.fieldPaddingX != null || s.fieldPaddingY != null ? `${s.fieldPaddingY ?? 8}px ${s.fieldPaddingX ?? 12}px` : '0.5rem 0.75rem'};
-  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
-  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
+  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${borderColor}`};
+  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${borderColor};` : ''}
   border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
   font-family: inherit;
@@ -270,11 +272,30 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   position: relative;
 }
 
+.forms-expert-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px dashed ${borderColor};
+  border-radius: ${fieldRadius};
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.forms-expert-dropzone:hover {
+  border-color: ${s.primaryColor}80;
+  background-color: ${s.theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'};
+}
+
 .forms-expert-file {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'}`};
-  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${s.theme === 'dark' ? '#4b5563' : '#d1d5db'};` : ''}
+  border: ${s.fieldBorderStyle === 'bottom' ? 'none' : `1px solid ${borderColor}`};
+  ${s.fieldBorderStyle === 'bottom' ? `border-bottom: 1px solid ${borderColor};` : ''}
   border-radius: ${s.fieldBorderStyle === 'bottom' ? '0' : fieldRadius};
   font-size: ${fontSize};
   background-color: ${s.inputBackgroundColor || (s.theme === 'dark' ? '#374151' : '#ffffff')};
@@ -285,6 +306,12 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
   color: ${s.errorColor || '#ef4444'};
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+.forms-expert-divider {
+  border: none;
+  border-top: 1px solid ${separatorColor};
+  margin: ${fieldSpacing} 0;
 }
 
 .forms-expert-button-wrapper {

@@ -340,17 +340,64 @@ export function renderField(
       break;
     }
 
-    case 'file':
-      input = document.createElement('input');
-      input.type = 'file';
-      input.className = 'forms-expert-file';
+    case 'file': {
+      const borderColor = styling?.theme === 'dark' ? '#4b5563' : '#d1d5db';
+      const mutedColor = styling?.theme === 'dark' ? '#9ca3af' : '#6b7280';
+      const primaryColor = styling?.primaryColor || '#3b82f6';
+
+      const dropzone = document.createElement('label');
+      dropzone.htmlFor = `mira-field-${field.name}`;
+      dropzone.className = 'forms-expert-dropzone';
+
+      const fileInput = document.createElement('input');
+      fileInput.id = `mira-field-${field.name}`;
+      fileInput.name = field.name;
+      fileInput.type = 'file';
+      fileInput.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0';
+      if (field.allowedMimeTypes?.length) fileInput.accept = field.allowedMimeTypes.join(',');
+      if (field.multiple) fileInput.multiple = true;
+      dropzone.appendChild(fileInput);
+
+      const icon = document.createElement('div');
+      icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${mutedColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>`;
+      dropzone.appendChild(icon);
+
+      const text = document.createElement('span');
+      text.style.cssText = 'font-size:0.875rem;font-weight:500';
+      text.textContent = 'Drag & drop a file here, or click to browse';
+      dropzone.appendChild(text);
+
       if (field.allowedMimeTypes?.length) {
-        input.accept = field.allowedMimeTypes.join(',');
+        const types = document.createElement('span');
+        types.style.cssText = `font-size:0.75rem;color:${mutedColor}`;
+        types.textContent = field.allowedMimeTypes.join(', ');
+        dropzone.appendChild(types);
       }
-      if (field.multiple) {
-        input.multiple = true;
+      if (field.maxFileSize) {
+        const sizeInfo = document.createElement('span');
+        sizeInfo.style.cssText = `font-size:0.75rem;color:${mutedColor}`;
+        const s = field.maxFileSize;
+        sizeInfo.textContent = `Max size: ${s < 1048576 ? `${(s / 1024).toFixed(0)} KB` : `${(s / 1048576).toFixed(0)} MB`}`;
+        dropzone.appendChild(sizeInfo);
       }
-      break;
+
+      dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = primaryColor; dropzone.style.backgroundColor = styling?.theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)'; });
+      dropzone.addEventListener('dragleave', () => { dropzone.style.borderColor = borderColor; dropzone.style.backgroundColor = 'transparent'; });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.style.borderColor = borderColor;
+        dropzone.style.backgroundColor = 'transparent';
+      });
+
+      group.appendChild(dropzone);
+      if (error) {
+        const errorEl = document.createElement('div');
+        errorEl.className = 'forms-expert-error-message';
+        errorEl.textContent = error;
+        group.appendChild(errorEl);
+      }
+      return group;
+    }
 
     case 'currency': {
       input = document.createElement('input');
