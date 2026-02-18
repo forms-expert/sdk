@@ -630,7 +630,7 @@ export function FormsExpertForm({
         return (
           <div key={`row-${idx}`} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: fieldSpacing }}>
             {group.fields.map((f) => (
-              <div key={f.name} style={{ flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : '1 1 0', minWidth: '120px' }}>
+              <div key={f.name} style={{ flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : '1 1 0', minWidth: '180px' }}>
                 <FormFieldInput
                   field={f}
                   value={form.values[f.name]}

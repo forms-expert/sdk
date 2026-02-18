@@ -1131,7 +1131,7 @@ function FormsExpertForm({
               group.field.name
             );
           }
-          return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: fieldSpacing }, children: group.fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : "1 1 0", minWidth: "120px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: fieldSpacing }, children: group.fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: getWidthPercent(f.width) ? `0 0 calc(${getWidthPercent(f.width)} - 0.75rem)` : "1 1 0", minWidth: "180px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
             FormFieldInput,
             {
               field: f,

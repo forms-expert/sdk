@@ -692,7 +692,7 @@ export function renderForm(
           } else {
             wrapper.style.flex = '1 1 0';
           }
-          wrapper.style.minWidth = '120px';
+          wrapper.style.minWidth = '180px';
           const fieldEl = renderField(f, values[f.name], errors[f.name], styling);
           wrapper.appendChild(fieldEl);
           rowDiv.appendChild(wrapper);
