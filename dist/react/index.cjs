@@ -655,10 +655,13 @@ function getButtonRadius(radius) {
 function getFontSize(size) {
   switch (size) {
     case "sm":
+    case "small":
       return "0.875rem";
     case "md":
+    case "medium":
       return "1rem";
     case "lg":
+    case "large":
       return "1.125rem";
     default:
       return "1rem";
@@ -1342,7 +1345,8 @@ function FormFieldInput({
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: field.name, value: String(value || field.defaultValue || "") });
   }
   if (field.type === "checkbox" || field.type === "toggle" || field.type === "consent") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: fieldSpacing }, children: [
+    const consentSize = field.type === "consent" && field.consentFontSize ? `${field.consentFontSize}px` : void 0;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "0.5rem", marginBottom: fieldSpacing }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
         "input",
         {
@@ -1352,18 +1356,17 @@ function FormFieldInput({
           checked: Boolean(value),
           onChange,
           required: field.required,
-          style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor }
+          style: { width: "1rem", height: "1rem", accentColor: styling.primaryColor, marginTop: "0.125rem", flexShrink: 0 }
         }
       ),
-      (field.label || field.type === "consent" && field.consentText) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, className: styling.labelClassName, children: [
-        field.type === "consent" && field.consentText ? field.consentUrl ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { children: [
-          field.consentText,
-          " ",
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: field.consentUrl, target: "_blank", rel: "noopener noreferrer", style: { color: styling.primaryColor }, children: "(link)" })
-        ] }) : field.consentText : field.label,
-        field.required && !styling.hideRequiredAsterisk && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#ef4444", marginLeft: "0.25rem" }, children: "*" })
-      ] }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: styling.errorColor || "#ef4444", fontSize: "0.875rem", marginLeft: "0.5rem" }, children: error })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+        (field.label || field.type === "consent" && field.consentText) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: field.name, className: styling.labelClassName, style: { cursor: "pointer", ...consentSize ? { fontSize: consentSize } : {} }, children: [
+          field.type === "consent" && field.consentText ? field.consentText : field.label,
+          field.required && !styling.hideRequiredAsterisk && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#ef4444", marginLeft: "0.25rem" }, children: "*" })
+        ] }),
+        field.type === "consent" && field.consentUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: field.consentUrl, target: "_blank", rel: "noopener noreferrer", style: { color: styling.primaryColor, fontSize: "0.75rem", marginTop: "0.125rem", display: "inline-block" }, children: "View policy" }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: styling.errorColor || "#ef4444", fontSize: "0.875rem", marginTop: "0.25rem" }, children: error })
+      ] })
     ] });
   }
   const labelEl = field.label ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(

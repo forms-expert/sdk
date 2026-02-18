@@ -135,13 +135,17 @@ export function renderField(
     input.checked = Boolean(value);
     if (field.required) input.required = true;
     
+    const wrapper = document.createElement('div');
+
     const label = document.createElement('label');
     label.htmlFor = input.id;
+    label.style.cursor = 'pointer';
+    if (field.type === 'consent' && field.consentFontSize) {
+      label.style.fontSize = `${field.consentFontSize}px`;
+    }
     const text = field.type === 'consent' ? (field.consentText || field.label || field.name) : (field.label || field.name);
     label.innerHTML = `${escapeHtml(text)}${field.required ? '<span class="forms-expert-required">*</span>' : ''}`;
-    
-    group.appendChild(input);
-    group.appendChild(label);
+    wrapper.appendChild(label);
 
     if (field.type === 'consent' && field.consentUrl) {
       const link = document.createElement('a');
@@ -150,8 +154,11 @@ export function renderField(
       link.rel = 'noopener noreferrer';
       link.textContent = 'View policy';
       link.className = 'forms-expert-consent-link';
-      group.appendChild(link);
+      wrapper.appendChild(link);
     }
+    
+    group.appendChild(input);
+    group.appendChild(wrapper);
 
     if (error) {
       const errorEl = document.createElement('div');

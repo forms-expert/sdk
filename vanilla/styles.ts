@@ -45,9 +45,9 @@ function getButtonRadius(radius?: FormStyling['buttonRadius']): string {
 
 function getFontSize(size: FormStyling['fontSize']): string {
   switch (size) {
-    case 'sm': return '0.875rem';
-    case 'md': return '1rem';
-    case 'lg': return '1.125rem';
+    case 'sm': case 'small': return '0.875rem';
+    case 'md': case 'medium': return '1rem';
+    case 'lg': case 'large': return '1.125rem';
     default: return '1rem';
   }
 }
@@ -251,7 +251,7 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 
 .forms-expert-checkbox-group {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   margin-bottom: ${fieldSpacing};
 }
@@ -259,6 +259,8 @@ export function generateFormStyles(styling: FormStyling = defaultStyling): strin
 .forms-expert-checkbox {
   width: 1rem;
   height: 1rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
   accent-color: ${s.primaryColor};
   cursor: pointer;
 }

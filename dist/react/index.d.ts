@@ -42,6 +42,7 @@ interface FormField {
     paragraphFontSize?: number;
     consentText?: string;
     consentUrl?: string;
+    consentFontSize?: number;
     maxLength?: number;
     stepId?: string;
     visibleWhen?: {
@@ -75,15 +76,15 @@ interface SecondaryButton {
  * Form styling configuration
  */
 interface FormStyling {
-    theme: 'light' | 'dark' | 'system';
+    theme: 'light' | 'dark' | 'system' | 'custom';
     primaryColor: string;
     backgroundColor: string;
     textColor: string;
     errorColor?: string;
     successColor?: string;
     borderRadius: 'none' | 'sm' | 'md' | 'lg';
-    fontSize: 'sm' | 'md' | 'lg';
-    buttonStyle: 'filled' | 'outline';
+    fontSize: 'sm' | 'md' | 'lg' | 'small' | 'medium' | 'large';
+    buttonStyle: 'filled' | 'outline' | 'outlined' | 'minimal';
     labelPosition: 'top' | 'left' | 'floating';
     labelClassName?: string;
     fieldClassName?: string;

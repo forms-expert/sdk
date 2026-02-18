@@ -94,9 +94,9 @@ function getButtonRadius(radius?: FormStyling['buttonRadius']): string {
 
 function getFontSize(size: FormStyling['fontSize']): string {
   switch (size) {
-    case 'sm': return '0.875rem';
-    case 'md': return '1rem';
-    case 'lg': return '1.125rem';
+    case 'sm': case 'small': return '0.875rem';
+    case 'md': case 'medium': return '1rem';
+    case 'lg': case 'large': return '1.125rem';
     default: return '1rem';
   }
 }
@@ -905,8 +905,9 @@ function FormFieldInput({
 
   // Checkbox / toggle / consent — inline layout
   if (field.type === 'checkbox' || field.type === 'toggle' || field.type === 'consent') {
+    const consentSize = field.type === 'consent' && field.consentFontSize ? `${field.consentFontSize}px` : undefined;
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: fieldSpacing }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', marginBottom: fieldSpacing }}>
         <input
           type="checkbox"
           id={field.name}
@@ -914,19 +915,22 @@ function FormFieldInput({
           checked={Boolean(value)}
           onChange={onChange}
           required={field.required}
-          style={{ width: '1rem', height: '1rem', accentColor: styling.primaryColor }}
+          style={{ width: '1rem', height: '1rem', accentColor: styling.primaryColor, marginTop: '0.125rem', flexShrink: 0 }}
         />
-        {(field.label || (field.type === 'consent' && field.consentText)) && (
-          <label htmlFor={field.name} className={styling.labelClassName}>
-            {field.type === 'consent' && field.consentText
-              ? (field.consentUrl
-                ? <span>{field.consentText} <a href={field.consentUrl} target="_blank" rel="noopener noreferrer" style={{ color: styling.primaryColor }}>(link)</a></span>
-                : field.consentText)
-              : field.label}
-            {field.required && !styling.hideRequiredAsterisk && <span style={{ color: '#ef4444', marginLeft: '0.25rem' }}>*</span>}
-          </label>
-        )}
-        {error && <span style={{ color: styling.errorColor || '#ef4444', fontSize: '0.875rem', marginLeft: '0.5rem' }}>{error}</span>}
+        <div>
+          {(field.label || (field.type === 'consent' && field.consentText)) && (
+            <label htmlFor={field.name} className={styling.labelClassName} style={{ cursor: 'pointer', ...(consentSize ? { fontSize: consentSize } : {}) }}>
+              {field.type === 'consent' && field.consentText
+                ? field.consentText
+                : field.label}
+              {field.required && !styling.hideRequiredAsterisk && <span style={{ color: '#ef4444', marginLeft: '0.25rem' }}>*</span>}
+            </label>
+          )}
+          {field.type === 'consent' && field.consentUrl && (
+            <a href={field.consentUrl} target="_blank" rel="noopener noreferrer" style={{ color: styling.primaryColor, fontSize: '0.75rem', marginTop: '0.125rem', display: 'inline-block' }}>View policy</a>
+          )}
+          {error && <div style={{ color: styling.errorColor || '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem' }}>{error}</div>}
+        </div>
       </div>
     );
   }
