@@ -153,6 +153,14 @@ interface FormBranding {
     url?: string;
 }
 /**
+ * Theme information
+ */
+interface ThemeInfo {
+    key: string;
+    name: string;
+    isDefault: boolean;
+}
+/**
  * Form status response from API
  */
 interface FormStatusResponse {
@@ -218,6 +226,8 @@ interface FormStatusResponse {
     currentLanguage?: string | null;
     /** Whether to show language switch UI */
     showLanguageSwitch?: boolean;
+    /** Available themes for this form */
+    availableThemes?: ThemeInfo[];
 }
 /**
  * Validation error
@@ -241,6 +251,8 @@ interface FormsSDKConfig {
     apiKey: string;
     resourceId: string;
     baseUrl?: string;
+    /** Default theme key to use when loading forms */
+    theme?: string;
 }
 
 interface UseFormOptions {
@@ -258,6 +270,8 @@ interface UseFormOptions {
     autoInit?: boolean;
     /** Language code to pass to backend */
     lang?: string;
+    /** Theme key to apply */
+    theme?: string;
 }
 interface UseFormReturn {
     /** Form configuration */
@@ -294,6 +308,12 @@ interface UseFormReturn {
     captchaSiteKey: ComputedRef<string | undefined>;
     /** Whether honeypot is enabled */
     honeypotEnabled: ComputedRef<boolean>;
+    /** Available themes for this form */
+    availableThemes: ComputedRef<ThemeInfo[]>;
+    /** Switch to a different theme */
+    setTheme: (themeKey: string) => Promise<void>;
+    /** Currently active theme key */
+    activeTheme: Ref<string | undefined>;
 }
 /**
  * Vue composable for managing form state and submission

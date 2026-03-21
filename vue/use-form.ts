@@ -6,6 +6,7 @@ import {
   SubmissionResponse,
   ValidationError,
   FormValidationError,
+  ThemeInfo,
 } from '../core';
 
 export interface UseFormOptions {
@@ -23,6 +24,8 @@ export interface UseFormOptions {
   autoInit?: boolean;
   /** Language code to pass to backend */
   lang?: string;
+  /** Theme key to apply */
+  theme?: string;
 }
 
 export interface UseFormReturn {
@@ -60,6 +63,12 @@ export interface UseFormReturn {
   captchaSiteKey: ComputedRef<string | undefined>;
   /** Whether honeypot is enabled */
   honeypotEnabled: ComputedRef<boolean>;
+  /** Available themes for this form */
+  availableThemes: ComputedRef<ThemeInfo[]>;
+  /** Switch to a different theme */
+  setTheme: (themeKey: string) => Promise<void>;
+  /** Currently active theme key */
+  activeTheme: Ref<string | undefined>;
 }
 
 /**
@@ -74,16 +83,23 @@ export function useForm(options: UseFormOptions): UseFormReturn {
   const isSubmitted = ref(false);
   const errors = ref<Record<string, string>>({});
   const values = ref<Record<string, unknown>>({});
+  const activeTheme = ref<string | undefined>(options.theme);
 
   const initialize = async (): Promise<FormStatusResponse> => {
     isInitializing.value = true;
     try {
-      const formConfig = await sdk.isActive(options.slug, options.lang);
+      const formConfig = await sdk.isActive(options.slug, options.lang, activeTheme.value);
       config.value = formConfig;
       return formConfig;
     } finally {
       isInitializing.value = false;
     }
+  };
+
+  const setTheme = async (themeKey: string): Promise<void> => {
+    activeTheme.value = themeKey;
+    const formConfig = await sdk.isActive(options.slug, options.lang, themeKey);
+    config.value = formConfig;
   };
 
   const setValue = (name: string, value: unknown) => {
@@ -159,6 +175,7 @@ export function useForm(options: UseFormOptions): UseFormReturn {
   const captchaProvider = computed(() => config.value?.settings?.captcha?.provider);
   const captchaSiteKey = computed(() => config.value?.settings?.captcha?.siteKey);
   const honeypotEnabled = computed(() => config.value?.settings?.honeypot ?? false);
+  const availableThemes = computed<ThemeInfo[]>(() => config.value?.availableThemes || []);
 
   // Auto-initialize
   onMounted(() => {
@@ -185,5 +202,8 @@ export function useForm(options: UseFormOptions): UseFormReturn {
     captchaProvider,
     captchaSiteKey,
     honeypotEnabled,
+    availableThemes,
+    setTheme,
+    activeTheme,
   };
 }

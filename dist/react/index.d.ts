@@ -154,6 +154,14 @@ interface FormBranding {
     url?: string;
 }
 /**
+ * Theme information
+ */
+interface ThemeInfo {
+    key: string;
+    name: string;
+    isDefault: boolean;
+}
+/**
  * Form status response from API
  */
 interface FormStatusResponse {
@@ -219,6 +227,8 @@ interface FormStatusResponse {
     currentLanguage?: string | null;
     /** Whether to show language switch UI */
     showLanguageSwitch?: boolean;
+    /** Available themes for this form */
+    availableThemes?: ThemeInfo[];
 }
 /**
  * Validation error
@@ -275,6 +285,8 @@ interface FormsSDKConfig {
     apiKey: string;
     resourceId: string;
     baseUrl?: string;
+    /** Default theme key to use when loading forms */
+    theme?: string;
 }
 /**
  * Form handler options
@@ -282,6 +294,8 @@ interface FormsSDKConfig {
 interface FormHandlerOptions {
     /** Track form views for analytics (completion rate) */
     trackViews?: boolean;
+    /** Theme key to use */
+    theme?: string;
     onSubmitStart?: () => void;
     onSubmitSuccess?: (response: SubmissionResponse) => void;
     onSubmitError?: (error: FormsError) => void;
@@ -304,6 +318,7 @@ declare class FormsApiClient {
     private baseUrl;
     private apiKey;
     private resourceId;
+    private defaultTheme?;
     constructor(config: FormsSDKConfig);
     /**
      * Build URL with token query parameter
@@ -316,7 +331,11 @@ declare class FormsApiClient {
     /**
      * Check if form is active and get configuration
      */
-    isActive(slug: string, lang?: string): Promise<FormStatusResponse>;
+    isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse>;
+    /**
+     * Fetch form config with a specific theme applied
+     */
+    getConfigWithTheme(slug: string, themeKey: string, lang?: string): Promise<FormStatusResponse>;
     /**
      * Validate form data without submitting
      */
@@ -351,6 +370,7 @@ declare class FormHandler {
     private slug;
     private config;
     private options;
+    private theme?;
     constructor(apiClient: FormsApiClient, slug: string, options?: FormHandlerOptions);
     /**
      * Initialize form handler and fetch configuration
@@ -385,6 +405,14 @@ declare class FormHandler {
      */
     submit(data: Record<string, unknown>, options?: SubmitOptions): Promise<SubmissionResponse>;
     /**
+     * Switch to a different theme
+     */
+    setTheme(themeKey: string, lang?: string): Promise<FormStatusResponse>;
+    /**
+     * Get available themes
+     */
+    getAvailableThemes(): ThemeInfo[];
+    /**
      * Get success message from config
      */
     getSuccessMessage(): string;
@@ -402,7 +430,7 @@ declare class FormsSDK {
     /**
      * Check if form is active and get configuration
      */
-    isActive(slug: string, lang?: string): Promise<FormStatusResponse>;
+    isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse>;
     /**
      * Validate form data without submitting
      */
@@ -456,6 +484,8 @@ interface UseFormOptions {
     autoInit?: boolean;
     /** Language code to pass to backend */
     lang?: string;
+    /** Theme key to apply */
+    theme?: string;
 }
 interface UseFormReturn {
     /** Form configuration */
@@ -510,6 +540,16 @@ interface UseFormReturn {
     maxAttachments: number;
     /** Max attachment size in bytes */
     maxAttachmentSize: number;
+    /** Available themes for this form */
+    availableThemes: Array<{
+        key: string;
+        name: string;
+        isDefault: boolean;
+    }>;
+    /** Switch to a different theme */
+    setTheme: (themeKey: string) => Promise<void>;
+    /** Currently active theme key */
+    activeTheme: string | undefined;
 }
 /**
  * Hook for managing form state and submission
@@ -537,10 +577,12 @@ interface FormsExpertFormProps {
     style?: CSSProperties;
     /** Language code to pass to backend */
     lang?: string;
+    /** Theme key to apply */
+    theme?: string;
 }
 /**
  * Forms Expert form component
  */
-declare function FormsExpertForm({ config, slug, trackViews, submitText, onSuccess, onError, onValidationError, className, style, lang, }: FormsExpertFormProps): react_jsx_runtime.JSX.Element;
+declare function FormsExpertForm({ config, slug, trackViews, submitText, onSuccess, onError, onValidationError, className, style, lang, theme, }: FormsExpertFormProps): react_jsx_runtime.JSX.Element;
 
 export { FormsExpertForm, FormsProvider, type UseFormOptions, type UseFormReturn, useForm, useFormsSDK };

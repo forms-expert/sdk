@@ -17,6 +17,7 @@ import {
   FormsError,
   UploadProgress,
   FileValidationError,
+  ThemeInfo,
 } from '../core';
 
 interface FormsContextValue {
@@ -82,6 +83,8 @@ export interface UseFormOptions {
   autoInit?: boolean;
   /** Language code to pass to backend */
   lang?: string;
+  /** Theme key to apply */
+  theme?: string;
 }
 
 export interface UseFormReturn {
@@ -137,6 +140,12 @@ export interface UseFormReturn {
   maxAttachments: number;
   /** Max attachment size in bytes */
   maxAttachmentSize: number;
+  /** Available themes for this form */
+  availableThemes: Array<{ key: string; name: string; isDefault: boolean }>;
+  /** Switch to a different theme */
+  setTheme: (themeKey: string) => Promise<void>;
+  /** Currently active theme key */
+  activeTheme: string | undefined;
 }
 
 /**
@@ -165,14 +174,15 @@ export function useForm(options: UseFormOptions): UseFormReturn {
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [error, setError] = useState<Error | null>(null);
   const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
+  const [activeTheme, setActiveTheme] = useState<string | undefined>(options.theme);
 
   // Extract values to avoid stale closure issues
-  const { slug, trackViews, lang, autoInit, onSuccess, onError, onValidationError } = options;
+  const { slug, trackViews, lang, autoInit, onSuccess, onError, onValidationError, theme } = options;
 
   const initialize = useCallback(async () => {
     setIsInitializing(true);
     try {
-      const formConfig = await sdk.isActive(slug, lang);
+      const formConfig = await sdk.isActive(slug, lang, activeTheme);
       setConfig(formConfig);
       if (trackViews) {
         void sdk.trackView(slug);
@@ -181,7 +191,20 @@ export function useForm(options: UseFormOptions): UseFormReturn {
     } finally {
       setIsInitializing(false);
     }
-  }, [sdk, slug, trackViews, lang]);
+  }, [sdk, slug, trackViews, lang, activeTheme]);
+
+  const setThemeHandler = useCallback(async (themeKey: string) => {
+    setActiveTheme(themeKey);
+    const formConfig = await sdk.isActive(slug, lang, themeKey);
+    setConfig(formConfig);
+  }, [sdk, slug, lang]);
+
+  // React to theme prop changes
+  useEffect(() => {
+    if (theme !== undefined && theme !== activeTheme) {
+      setThemeHandler(theme);
+    }
+  }, [theme]);
 
   // Auto-initialize
   useEffect(() => {
@@ -336,5 +359,8 @@ export function useForm(options: UseFormOptions): UseFormReturn {
     allowsAttachments,
     maxAttachments,
     maxAttachmentSize,
+    availableThemes: config?.availableThemes || [],
+    setTheme: setThemeHandler,
+    activeTheme,
   };
 }

@@ -8,6 +8,7 @@ import {
   FormHandlerOptions,
   FormsError,
   FormValidationError,
+  ThemeInfo,
 } from './types';
 
 /**
@@ -18,6 +19,7 @@ export class FormHandler {
   private slug: string;
   private config: FormStatusResponse | null = null;
   private options: FormHandlerOptions;
+  private theme?: string;
 
   constructor(
     apiClient: FormsApiClient,
@@ -27,13 +29,14 @@ export class FormHandler {
     this.apiClient = apiClient;
     this.slug = slug;
     this.options = options;
+    this.theme = options.theme;
   }
 
   /**
    * Initialize form handler and fetch configuration
    */
   async initialize(lang?: string): Promise<FormStatusResponse> {
-    this.config = await this.apiClient.isActive(this.slug, lang);
+    this.config = await this.apiClient.isActive(this.slug, lang, this.theme);
     if (this.options.trackViews) {
       this.apiClient.trackView(this.slug);
     }
@@ -113,6 +116,22 @@ export class FormHandler {
   }
 
   /**
+   * Switch to a different theme
+   */
+  async setTheme(themeKey: string, lang?: string): Promise<FormStatusResponse> {
+    this.theme = themeKey;
+    this.config = await this.apiClient.isActive(this.slug, lang, themeKey);
+    return this.config;
+  }
+
+  /**
+   * Get available themes
+   */
+  getAvailableThemes(): ThemeInfo[] {
+    return this.config?.availableThemes || [];
+  }
+
+  /**
    * Get success message from config
    */
   getSuccessMessage(): string {
@@ -140,8 +159,8 @@ export class FormsSDK {
   /**
    * Check if form is active and get configuration
    */
-  async isActive(slug: string, lang?: string): Promise<FormStatusResponse> {
-    return this.apiClient.isActive(slug, lang);
+  async isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse> {
+    return this.apiClient.isActive(slug, lang, theme);
   }
 
   /**

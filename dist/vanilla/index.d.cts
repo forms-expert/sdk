@@ -156,6 +156,8 @@ interface FormsSDKConfig {
     apiKey: string;
     resourceId: string;
     baseUrl?: string;
+    /** Default theme key to use when loading forms */
+    theme?: string;
 }
 
 declare function generateFormStyles(styling?: FormStyling): string;
@@ -213,6 +215,8 @@ interface FormWidgetOptions {
     redirectUrl?: string;
     /** Language code to pass to backend */
     lang?: string;
+    /** Theme key to apply */
+    theme?: string;
 }
 /**
  * Form widget for embedding forms
@@ -260,6 +264,18 @@ declare class FormWidget {
      * Render error message
      */
     private renderError;
+    /**
+     * Switch to a different theme at runtime
+     */
+    setTheme(themeKey: string): Promise<void>;
+    /**
+     * Get available themes
+     */
+    getAvailableThemes(): Array<{
+        key: string;
+        name: string;
+        isDefault: boolean;
+    }>;
     /**
      * Destroy widget
      */

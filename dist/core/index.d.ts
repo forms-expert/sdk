@@ -151,6 +151,14 @@ interface FormBranding {
     url?: string;
 }
 /**
+ * Theme information
+ */
+interface ThemeInfo {
+    key: string;
+    name: string;
+    isDefault: boolean;
+}
+/**
  * Form status response from API
  */
 interface FormStatusResponse {
@@ -216,6 +224,8 @@ interface FormStatusResponse {
     currentLanguage?: string | null;
     /** Whether to show language switch UI */
     showLanguageSwitch?: boolean;
+    /** Available themes for this form */
+    availableThemes?: ThemeInfo[];
 }
 /**
  * Validation error
@@ -272,6 +282,8 @@ interface FormsSDKConfig {
     apiKey: string;
     resourceId: string;
     baseUrl?: string;
+    /** Default theme key to use when loading forms */
+    theme?: string;
 }
 /**
  * Form handler options
@@ -279,6 +291,8 @@ interface FormsSDKConfig {
 interface FormHandlerOptions {
     /** Track form views for analytics (completion rate) */
     trackViews?: boolean;
+    /** Theme key to use */
+    theme?: string;
     onSubmitStart?: () => void;
     onSubmitSuccess?: (response: SubmissionResponse) => void;
     onSubmitError?: (error: FormsError) => void;
@@ -308,6 +322,7 @@ declare class FormsApiClient {
     private baseUrl;
     private apiKey;
     private resourceId;
+    private defaultTheme?;
     constructor(config: FormsSDKConfig);
     /**
      * Build URL with token query parameter
@@ -320,7 +335,11 @@ declare class FormsApiClient {
     /**
      * Check if form is active and get configuration
      */
-    isActive(slug: string, lang?: string): Promise<FormStatusResponse>;
+    isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse>;
+    /**
+     * Fetch form config with a specific theme applied
+     */
+    getConfigWithTheme(slug: string, themeKey: string, lang?: string): Promise<FormStatusResponse>;
     /**
      * Validate form data without submitting
      */
@@ -355,6 +374,7 @@ declare class FormHandler {
     private slug;
     private config;
     private options;
+    private theme?;
     constructor(apiClient: FormsApiClient, slug: string, options?: FormHandlerOptions);
     /**
      * Initialize form handler and fetch configuration
@@ -389,6 +409,14 @@ declare class FormHandler {
      */
     submit(data: Record<string, unknown>, options?: SubmitOptions): Promise<SubmissionResponse>;
     /**
+     * Switch to a different theme
+     */
+    setTheme(themeKey: string, lang?: string): Promise<FormStatusResponse>;
+    /**
+     * Get available themes
+     */
+    getAvailableThemes(): ThemeInfo[];
+    /**
      * Get success message from config
      */
     getSuccessMessage(): string;
@@ -406,7 +434,7 @@ declare class FormsSDK {
     /**
      * Check if form is active and get configuration
      */
-    isActive(slug: string, lang?: string): Promise<FormStatusResponse>;
+    isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse>;
     /**
      * Validate form data without submitting
      */
@@ -431,4 +459,4 @@ declare class FormsSDK {
     }): Promise<SubmissionResponse>;
 }
 
-export { type BasicFieldType, type CaptchaSettings, type FileValidationError, type FormBranding, type FormField, type FormFieldOption, type FormFieldType, FormHandler, type FormHandlerOptions, type FormSchema, type FormStatusResponse, type FormStyling, FormValidationError, FormsApiClient, FormsError, FormsSDK, type FormsSDKConfig, type InteractiveFieldType, type LayoutFieldType, type SecondaryButton, type SubmissionResponse, type SubmitOptions, type UploadProgress, type ValidationError, type ValidationResponse };
+export { type BasicFieldType, type CaptchaSettings, type FileValidationError, type FormBranding, type FormField, type FormFieldOption, type FormFieldType, FormHandler, type FormHandlerOptions, type FormSchema, type FormStatusResponse, type FormStyling, FormValidationError, FormsApiClient, FormsError, FormsSDK, type FormsSDKConfig, type InteractiveFieldType, type LayoutFieldType, type SecondaryButton, type SubmissionResponse, type SubmitOptions, type ThemeInfo, type UploadProgress, type ValidationError, type ValidationResponse };

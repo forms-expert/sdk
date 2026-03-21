@@ -192,6 +192,8 @@ interface FormsExpertFormProps {
   style?: CSSProperties;
   /** Language code to pass to backend */
   lang?: string;
+  /** Theme key to apply */
+  theme?: string;
 }
 
 /**
@@ -208,6 +210,7 @@ export function FormsExpertForm({
   className,
   style,
   lang,
+  theme,
 }: FormsExpertFormProps) {
   const form = useForm({
     slug,
@@ -218,6 +221,7 @@ export function FormsExpertForm({
     onValidationError,
     autoInit: true,
     lang,
+    theme,
   });
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);

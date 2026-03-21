@@ -15,11 +15,13 @@ export class FormsApiClient {
   private baseUrl: string;
   private apiKey: string;
   private resourceId: string;
+  private defaultTheme?: string;
 
   constructor(config: FormsSDKConfig) {
     this.apiKey = config.apiKey;
     this.resourceId = config.resourceId;
     this.baseUrl = (config.baseUrl || 'https://api.forms.expert/api/v1').replace(/\/$/, '');
+    this.defaultTheme = config.theme;
   }
 
   /**
@@ -65,9 +67,19 @@ export class FormsApiClient {
   /**
    * Check if form is active and get configuration
    */
-  async isActive(slug: string, lang?: string): Promise<FormStatusResponse> {
-    const langParam = lang ? `?lang=${encodeURIComponent(lang)}` : '';
-    return this.request('GET', `/f/${this.resourceId}/${slug}/is-active${langParam}`);
+  async isActive(slug: string, lang?: string, theme?: string): Promise<FormStatusResponse> {
+    const params: string[] = [];
+    if (lang) params.push(`lang=${encodeURIComponent(lang)}`);
+    if (theme) params.push(`theme=${encodeURIComponent(theme)}`);
+    const queryString = params.length > 0 ? `?${params.join('&')}` : '';
+    return this.request('GET', `/f/${this.resourceId}/${slug}/is-active${queryString}`);
+  }
+
+  /**
+   * Fetch form config with a specific theme applied
+   */
+  async getConfigWithTheme(slug: string, themeKey: string, lang?: string): Promise<FormStatusResponse> {
+    return this.isActive(slug, lang, themeKey);
   }
 
   /**

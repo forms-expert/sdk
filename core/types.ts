@@ -173,6 +173,15 @@ export interface FormBranding {
 }
 
 /**
+ * Theme information
+ */
+export interface ThemeInfo {
+  key: string;
+  name: string;
+  isDefault: boolean;
+}
+
+/**
  * Form status response from API
  */
 export interface FormStatusResponse {
@@ -234,6 +243,8 @@ export interface FormStatusResponse {
   currentLanguage?: string | null;
   /** Whether to show language switch UI */
   showLanguageSwitch?: boolean;
+  /** Available themes for this form */
+  availableThemes?: ThemeInfo[];
 }
 
 /**
@@ -297,6 +308,8 @@ export interface FormsSDKConfig {
   apiKey: string;
   resourceId: string;
   baseUrl?: string;
+  /** Default theme key to use when loading forms */
+  theme?: string;
 }
 
 /**
@@ -305,6 +318,8 @@ export interface FormsSDKConfig {
 export interface FormHandlerOptions {
   /** Track form views for analytics (completion rate) */
   trackViews?: boolean;
+  /** Theme key to use */
+  theme?: string;
   onSubmitStart?: () => void;
   onSubmitSuccess?: (response: SubmissionResponse) => void;
   onSubmitError?: (error: FormsError) => void;

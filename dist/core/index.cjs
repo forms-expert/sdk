@@ -52,6 +52,7 @@ var FormsApiClient = class {
     this.apiKey = config.apiKey;
     this.resourceId = config.resourceId;
     this.baseUrl = (config.baseUrl || "https://api.forms.expert/api/v1").replace(/\/$/, "");
+    this.defaultTheme = config.theme;
   }
   /**
    * Build URL with token query parameter
@@ -86,9 +87,18 @@ var FormsApiClient = class {
   /**
    * Check if form is active and get configuration
    */
-  async isActive(slug, lang) {
-    const langParam = lang ? `?lang=${encodeURIComponent(lang)}` : "";
-    return this.request("GET", `/f/${this.resourceId}/${slug}/is-active${langParam}`);
+  async isActive(slug, lang, theme) {
+    const params = [];
+    if (lang) params.push(`lang=${encodeURIComponent(lang)}`);
+    if (theme) params.push(`theme=${encodeURIComponent(theme)}`);
+    const queryString = params.length > 0 ? `?${params.join("&")}` : "";
+    return this.request("GET", `/f/${this.resourceId}/${slug}/is-active${queryString}`);
+  }
+  /**
+   * Fetch form config with a specific theme applied
+   */
+  async getConfigWithTheme(slug, themeKey, lang) {
+    return this.isActive(slug, lang, themeKey);
   }
   /**
    * Validate form data without submitting
@@ -205,12 +215,13 @@ var FormHandler = class {
     this.apiClient = apiClient;
     this.slug = slug;
     this.options = options;
+    this.theme = options.theme;
   }
   /**
    * Initialize form handler and fetch configuration
    */
   async initialize(lang) {
-    this.config = await this.apiClient.isActive(this.slug, lang);
+    this.config = await this.apiClient.isActive(this.slug, lang, this.theme);
     if (this.options.trackViews) {
       this.apiClient.trackView(this.slug);
     }
@@ -276,6 +287,20 @@ var FormHandler = class {
     }
   }
   /**
+   * Switch to a different theme
+   */
+  async setTheme(themeKey, lang) {
+    this.theme = themeKey;
+    this.config = await this.apiClient.isActive(this.slug, lang, themeKey);
+    return this.config;
+  }
+  /**
+   * Get available themes
+   */
+  getAvailableThemes() {
+    return this.config?.availableThemes || [];
+  }
+  /**
    * Get success message from config
    */
   getSuccessMessage() {
@@ -295,8 +320,8 @@ var FormsSDK = class {
   /**
    * Check if form is active and get configuration
    */
-  async isActive(slug, lang) {
-    return this.apiClient.isActive(slug, lang);
+  async isActive(slug, lang, theme) {
+    return this.apiClient.isActive(slug, lang, theme);
   }
   /**
    * Validate form data without submitting

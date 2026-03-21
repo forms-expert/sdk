@@ -32,6 +32,8 @@ export interface FormWidgetOptions {
   redirectUrl?: string;
   /** Language code to pass to backend */
   lang?: string;
+  /** Theme key to apply */
+  theme?: string;
 }
 
 /**
@@ -69,7 +71,7 @@ export class FormWidget {
   async init(): Promise<void> {
     try {
       this.renderLoading();
-      this.config = await this.sdk.isActive(this.options.slug, this.options.lang);
+      this.config = await this.sdk.isActive(this.options.slug, this.options.lang, this.options.theme);
 
       if (!this.config.active) {
         this.renderError('This form is not available');
@@ -274,6 +276,28 @@ export class FormWidget {
   }
 
   /**
+   * Switch to a different theme at runtime
+   */
+  async setTheme(themeKey: string): Promise<void> {
+    this.config = await this.sdk.isActive(this.options.slug, this.options.lang, themeKey);
+    this.options.theme = themeKey;
+    // Re-inject styles with new theme
+    if (this.styleEl) {
+      const mergedStyling = { ...this.config?.schema?.styling, ...this.config?.styling } as FormStyling | undefined;
+      this.styleEl.textContent = generateFormStyles(mergedStyling);
+      this.injectGoogleFont(mergedStyling?.fontFamily);
+    }
+    this.render();
+  }
+
+  /**
+   * Get available themes
+   */
+  getAvailableThemes(): Array<{ key: string; name: string; isDefault: boolean }> {
+    return (this.config as any)?.availableThemes || [];
+  }
+
+  /**
    * Destroy widget
    */
   destroy(): void {
@@ -304,6 +328,8 @@ export function autoInit(): void {
       return;
     }
 
+    const theme = el.getAttribute('data-theme') || undefined;
+
     const widget = new FormWidget(
       { apiKey, resourceId, baseUrl },
       {
@@ -313,6 +339,7 @@ export function autoInit(): void {
         submitText: el.getAttribute('data-submit-text') || undefined,
         resetOnSuccess: el.getAttribute('data-reset') === 'true',
         lang: el.getAttribute('data-lang') || undefined,
+        theme,
       }
     );
 
